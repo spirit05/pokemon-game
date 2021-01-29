@@ -1,5 +1,4 @@
 import s from './style.module.css';
-console.log('s: ', s);
 
 const Header = ({ title, descr}) => {
     return (
