@@ -153,7 +153,7 @@ const App = () => {
       />
       <Layout 
         id="1"
-        title={title}
+        title= 'About game'
         urlBg={bg2}
       >
         <img src={logoImg} className={ s.logo} alt="Pokemon Game Logo" />
@@ -181,7 +181,7 @@ const App = () => {
       </Layout>
       <Layout 
         id="3"
-        title={title}
+        title= 'Rules'
         urlBg={bg2}
       >
         <p>To win, a majority of the total ten cards played (including the one card that is not placed on the board) must be of the player's card color. To do this, the player must capture cards by placing a card adjacent to an opponent's card whereupon the 'ranks' of the sides where the two cards touch will be compared.</p>

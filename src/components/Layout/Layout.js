@@ -1,6 +1,6 @@
 import s from './style.module.css';
 
-const Layout = ({ id, title, urlBg, colorBg, children}) => {
+const Layout = ({ id, title, urlBg = false, colorBg = false, children}) => {
     
     const styleBg = {};
     
