@@ -167,14 +167,14 @@ const App = () => {
       >
         <div className={ s.flex} >
           {
-            POKEMONS.map( i => 
+            POKEMONS.map( item => 
                 <PokemonCard 
-                    key={ i.id }
-                    name = { i.name }
-                    id = { i.id } 
-                    img = { i.img }
-                    type = { i.type }
-                    values = { i.values }
+                    key={ item.id }
+                    name = { item.name }
+                    id = { item.id } 
+                    img = { item.img }
+                    type = { item.type }
+                    values = { item.values }
                 />)
           }
         </div>
