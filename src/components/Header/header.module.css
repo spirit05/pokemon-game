@@ -13,7 +13,7 @@
     position: fixed;
     background: url('../../img/header/Stars.svg');
     background-attachment: fixed;
-    width: 100%;
+    width: 100vw;
     min-height: 100vh;
     z-index: -1;
 		animation: stars-move-in 1000ms 300ms forwards;
@@ -89,7 +89,23 @@
     line-height: 32px;
 }
 
+.root button {
+    display: block;
+    cursor: pointer;
+    background-color: limegreen;
+    border: 1px solid limegreen;
+    padding: 1rem 4rem;
+    margin: 0 auto;
+}
+
+.root button:hover {
+    background-color: transparent;
+}
+
 @media (max-width: 500px) {
+    .root {
+        width: 100vw;
+    }
     .container h1 {
         text-align: center;
     }
