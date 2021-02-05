@@ -8,7 +8,6 @@ import s from './home.module.css';
 import bg2 from '../../img/bg2.jpg';
 import logoImg from '../../img/logo.png';
 
-const title = "Pokemon Game";
 
 const HomePage = () => {
     const history = useHistory();
@@ -20,7 +19,7 @@ const HomePage = () => {
   return (
     <>
       <Header 
-        title={title}
+        title= 'Pokemon Game'
         descr="This is simple triple triad card game"
         onClickButton={handlerClickButton}
       />
