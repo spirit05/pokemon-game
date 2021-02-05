@@ -1,4 +1,5 @@
 import { useRouteMatch, Route, Switch, Redirect } from "react-router-dom";
+
 import { MenuHeader } from "./components/MenuHeader/MenuHeader";
 import HomePage from './routes/Home/Home';
 import { GamePage } from './routes/Game/Game';

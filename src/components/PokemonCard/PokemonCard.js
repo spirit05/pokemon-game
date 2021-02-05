@@ -4,7 +4,15 @@ import card from './accets/card-back-side.jpg';
 
 import s from './pokemonCard.module.css';
 
-const PokemonCard = ( { name, id, img, type, values, onChangeCard, isActive = false} ) => {
+const PokemonCard = ( { 
+    name, 
+    id, 
+    img, 
+    type, 
+    values, 
+    onChangeCard, 
+    isActive = false
+} ) => {
 
     const handlerClick = () => {
         onChangeCard && onChangeCard( id )
