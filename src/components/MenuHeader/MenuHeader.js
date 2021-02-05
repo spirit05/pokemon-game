@@ -2,22 +2,24 @@ import { useState } from "react";
 import { Menu } from "./Menu/Menu";
 import { NavBar } from "./Navbar/NavBar";
 
-export const MenuHeader = () => {
-    const [menuActive, setMenuActive] = useState(false);
+export const MenuHeader = ( { bgActive } ) => {
+    const [isMenuActive, setMenuActive] = useState(null);
 
-    const handlerChangeMenu = (bool) => {
-        setMenuActive(bool);
+    const handlerChangeMenu = () => {
+        setMenuActive(prevState => !prevState);
     };
 
     return (
         <>
-            <NavBar 
-                id="navbar"
-                menuActive={ menuActive }
+            <Menu 
+                isMenuActive={ isMenuActive }
                 onChangeMenu={ handlerChangeMenu }
             />
-            <Menu 
-                menuActive={ menuActive }
+            <NavBar 
+                id="navbar"
+                isMenuActive={ isMenuActive }
+                bgActive={bgActive}
+                onChangeMenu={ handlerChangeMenu }
             />
         </>
     );

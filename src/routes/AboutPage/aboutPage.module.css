@@ -1,0 +1,23 @@
+.section {
+    min-height: 30vh;
+    background-image: url(./access/aboutBg.svg);
+    color: #fefefe;
+}
+
+.title {
+    display: block;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 3rem;
+    margin: 0;
+}
+
+.descr {
+    width: 80vw;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: 0.1rem;
+    margin: 0 auto;
+    padding: 1rem;
+}
