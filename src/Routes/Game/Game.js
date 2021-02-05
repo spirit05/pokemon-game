@@ -6,21 +6,21 @@ import POKEMONS from '../../pokemons.json';
 
 import s from './game.module.css';
 
-const arr = JSON.parse(JSON.stringify(POKEMONS));
-
 export const GamePage = () => {
 
-    const [ card, setCard ] = useState(arr);
+    const [ card, setCard ] = useState(POKEMONS);
 
     const history = useHistory();
 
     const handlerClick = (cardId) => {
         setCard( prevState => {
-            prevState.map( item => {
-                if(item.id === cardId) item.active = true;
+            const newState = prevState.map( item => {
+                if(item.id === cardId) {
+                    return {...item, active: !item.active};
+                }
                 return item;
             });
-        return [...prevState];
+        return newState;
         })
     }  
 

@@ -79,7 +79,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    position: fixed;
     background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Moon.svg?sanitize=true) right 150% no-repeat;
     background-size: 30% 30%;
     background-attachment: fixed;
@@ -156,7 +155,7 @@
         right: 50%;
         top: 10%;
         width: 80%;
-        transform: translate(50%, 0);
+        transform: translate(-50%, 0);
         animation: text-fade-in 1000ms 800ms forwards;
     }
 
