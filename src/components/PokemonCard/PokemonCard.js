@@ -5,6 +5,7 @@ import card from './accets/card-back-side.jpg';
 import s from './pokemonCard.module.css';
 
 const PokemonCard = ( { 
+    objId,
     name, 
     id, 
     img, 
@@ -15,7 +16,7 @@ const PokemonCard = ( {
 } ) => {
 
     const handlerClick = () => {
-        onChangeCard && onChangeCard( id )
+        onChangeCard && onChangeCard( objId )
     }
 
     return (

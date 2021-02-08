@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import PokemonCard from '../../components/PokemonCard/PokemonCard';
 
-import { database, fire } from '../../service/firebase';
+import { database } from '../../service/firebase';
 
 import s from './game.module.css';
 
@@ -10,28 +10,21 @@ export const GamePage = () => {
     const [ cards, setCard ] = useState({});
     
     useEffect(()=> {
-        database.ref('pokemons').on('value', snapshot => {
+        database.ref('pokemons').once('value', snapshot => {
             setCard(snapshot.val());
           })      
-    }, [])   
+    }, []);  
 
     const history = useHistory();
 
-    const handlerClick = (cardId) => {
-        setCard(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                if (pokemon.id === cardId) {
-                    pokemon.active = !pokemon.active;
-                    fire.database().ref('pokemons/' + item[0]).set({...pokemon});
-                }
-                
-                acc[item[0]] = pokemon;
+    const handlerClick = (objId) => {
+        const pokemon = {...cards[objId]};
+        pokemon.active = !pokemon.active;
 
-                return acc;
-            }, {});
-        });
-    }  
+        database.ref('pokemons/' + objId).set(pokemon).then(() => {
+            setCard(prevState => ({ ...prevState, [objId]: pokemon })
+        )}).catch( err => console.error( err ));
+    };
 
     const handlerBackHome = () => {
         history.push('/');
@@ -39,8 +32,6 @@ export const GamePage = () => {
 
     const handlerAddPokemon = () => {
         // A post entry.
-        const randomId = parseInt(Math.random() * 100);
-
         const postData = {
             "abilities": [
                 "keen-eye",
@@ -60,7 +51,7 @@ export const GamePage = () => {
               "name": "pidgeotto",
               "base_experience": 122,
               "height": 11,
-              "id": randomId,
+              "id": 'randomId',
               "values": {
                 "top": "A",
                 "right": 2,
@@ -70,13 +61,15 @@ export const GamePage = () => {
         };
     
         // Get a key for a new Post.
-        const newPostKey = fire.database().ref().child('pokemons').push().key;
+        const newPostKey = database.ref().child('pokemons').push().key;
     
         // Write the new post's data simultaneously in the posts list and the user's post list.
         const updates = {};
-        updates['pokemons/' + newPostKey] = postData;
+        updates['pokemons/' + newPostKey] = {...postData, ['id']: newPostKey};
     
-        return fire.database().ref().update(updates);
+        return database.ref().update(updates).then(() => {
+            setCard(prevState => ({...prevState, [newPostKey]: postData}))
+        });
     }
 
     return (
@@ -88,7 +81,7 @@ export const GamePage = () => {
                     {
                         Object.entries(cards).map( ([key,{ id, name, img, type, values, active }]) => (
                             <PokemonCard 
-                                key={ id }
+                                key={ key }
                                 objId={ key }
                                 name = { name }
                                 id = { id } 
