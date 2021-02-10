@@ -11,7 +11,39 @@ const firebaseConfig = {
     appId: "1:168092574528:web:5d626e7994197e6048d0a5"
   };
   
-  firebase.initializeApp(firebaseConfig);
+class Firebase {
+  constructor() {
+    firebase.initializeApp(firebaseConfig);
 
-export const fire = firebase;
-export const database = fire.database();  
+    this.fire = firebase;
+    this.database = this.fire.database();
+  }
+
+  //Сокет соединение firebase (автоматическое обновление данных как в базе так и на всех устройствах)
+  getCardSoket = cb => {
+    this.database.ref('pokemons').on('value', snapshot => {
+      cb(snapshot.val());
+    })
+  }
+
+  getCardsOnce = async () => {
+    return await this.database.ref('pokemons').once('value').then(snapshot => snapshot.val());
+  }
+
+  postCard = (key, pokemon) => {
+    this.database.ref(`pokemons/${key}`).set(pokemon);
+  }
+
+  addCard = (data, cb = null) => {
+    // Get a key for a new Post.
+    const newPostKey = this.database.ref().child('pokemons').push().key;
+    
+    //С сокет
+    this.database.ref('pokemons/' + newPostKey).set({...data, ['id']: newPostKey});
+
+    //С once
+    // this.database.ref('pokemons/' + newPostKey).set({...data, ['id']: newPostKey}).then(() => cb());
+  }
+}
+
+export default Firebase; 

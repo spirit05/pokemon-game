@@ -8,10 +8,15 @@ import { ContactPage } from "./routes/ContactPage/ContactPage";
 import Footer from "./components/Footer/Footer";
 import { NotFound } from "./routes/NotFound/NotFound";
 
+import { FireBaseContext } from './context/firebaseContext';
+import Firebase from "./service/firebase";
+
+
 const App = () => {
   const match = useRouteMatch('/'); 
 
   return (
+    <FireBaseContext.Provider value={new Firebase()}>
       <Switch>
         <Route path='/404' component={ NotFound } />
 
@@ -37,6 +42,7 @@ const App = () => {
 
         </Route>
       </Switch>
+    </FireBaseContext.Provider>
   )
 };
 

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
+import { FireBaseContext } from '../../../../context/firebaseContext';
 
-import { database } from '../../../../service/firebase';
 
 import s from './StartPage.module.css';
 
@@ -25,7 +25,7 @@ const DATA = {
       "name": "pidgeotto",
       "base_experience": 122,
       "height": 11,
-      "id": 'randomId',
+      "id": '',
       "values": {
         "top": "A",
         "right": 2,
@@ -35,16 +35,23 @@ const DATA = {
 }
 
 export const StartPage = () => { 
+    const firebase = useContext(FireBaseContext);
     const [ cards, setCards ] = useState({});
 
-    const getCards = () => {
-        database.ref('pokemons').once('value', snapshot => {
-            setCards(snapshot.val());
-          });    
-    };
+    // Используется в асинхронноном варианте с once
+    // const getCards = async () => {
+    //     const responce = await firebase.getCardsOnce();
+    //     setCards(responce);    
+    // };
     
-    useEffect(()=> {
-          getCards();
+    useEffect(() => {
+        //С использованием soket
+        firebase.getCardSoket( pokemons => {
+            setCards(pokemons);
+        });
+        
+        // Асинхронный вариант с once
+        // getCards();
     }, []);  
 
     const history = useHistory();
@@ -60,7 +67,8 @@ export const StartPage = () => {
 
                 acc[item[0]] = pokemon;
 
-                database.ref('pokemons/' + item[0]).set(pokemon);
+                firebase.postCard(item[0], pokemon);
+                // database.ref('pokemons/' + item[0]).set(pokemon);
 
                 return acc;
             }, {});
@@ -75,10 +83,12 @@ export const StartPage = () => {
         // A post entry.
         const data = DATA;
 
-        // Get a key for a new Post.
-        const newPostKey = database.ref().child('pokemons').push().key;
-    
-        database.ref('pokemons/' + newPostKey).set(data).then(() => getCards());
+        firebase.addCard(data);
+
+        // Использутся в асинхронном варианте с once
+        // firebase.addCard(data, async () => {
+        //     await getCards();
+        // })
     }
 
     return (
