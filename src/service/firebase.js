@@ -10,11 +10,11 @@ const firebaseConfig = {
     messagingSenderId: "168092574528",
     appId: "1:168092574528:web:5d626e7994197e6048d0a5"
   };
+
+firebase.initializeApp(firebaseConfig);
   
 class Firebase {
   constructor() {
-    firebase.initializeApp(firebaseConfig);
-
     this.fire = firebase;
     this.database = this.fire.database();
   }
@@ -26,6 +26,11 @@ class Firebase {
     })
   }
 
+  // Метод отписки от событий (сработает как только мы покинем страницу, где была включена подписка на событие)
+  ofCardSoket = () => {
+    this.database.ref('pokemons').off();
+  }
+
   getCardsOnce = async () => {
     return await this.database.ref('pokemons').once('value').then(snapshot => snapshot.val());
   }
@@ -34,12 +39,12 @@ class Firebase {
     this.database.ref(`pokemons/${key}`).set(pokemon);
   }
 
-  addCard = (data, cb = null) => {
+  addCard = (data, cb) => {
     // Get a key for a new Post.
     const newPostKey = this.database.ref().child('pokemons').push().key;
     
-    //С сокет
-    this.database.ref('pokemons/' + newPostKey).set({...data, ['id']: newPostKey});
+    //С сокет соединением
+    this.database.ref('pokemons/' + newPostKey).set(data);
 
     //С once
     // this.database.ref('pokemons/' + newPostKey).set({...data, ['id']: newPostKey}).then(() => cb());

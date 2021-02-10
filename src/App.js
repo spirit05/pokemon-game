@@ -1,4 +1,4 @@
-import { useRouteMatch, Route, Switch, Redirect } from "react-router-dom";
+import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 
 import { MenuHeader } from "./components/MenuHeader/MenuHeader";
 import HomePage from './routes/Home/Home';
@@ -13,7 +13,9 @@ import Firebase from "./service/firebase";
 
 
 const App = () => {
-  const match = useRouteMatch('/'); 
+  // useLocation дает информацию о том на какой странице мы ходимся
+  const location  = useLocation();
+  const isPadding = location.pathname === '/' || location.pathname === '/game/board'; 
 
   return (
     <FireBaseContext.Provider value={new Firebase()}>
@@ -24,7 +26,7 @@ const App = () => {
           
           <>
             <MenuHeader 
-              bgActive={ !match.isExact }
+              bgActive={ !isPadding }
             />
 
             <Switch>

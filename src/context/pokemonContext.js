@@ -1,3 +1,3 @@
 import React from 'react'; 
 
-export const textContext = React.createContext()
+export const PokemonContext = React.createContext(null);
