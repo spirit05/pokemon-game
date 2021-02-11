@@ -1,7 +1,5 @@
 import cn from 'classnames';
 
-import card from './accets/card-back-side.jpg';
-
 import s from './pokemonCard.module.css';
 
 const PokemonCard = ( { 
@@ -13,6 +11,7 @@ const PokemonCard = ( {
     onChangeCard,
     minimize,
     className, 
+    isSelected,
     isActive = false
 } ) => {
 
@@ -21,7 +20,13 @@ const PokemonCard = ( {
     }
 
     return (
-        <div className={cn(className, s.pokemonCard, {[s.active]: isActive})}>
+        <div 
+            className={cn(className, s.pokemonCard, {
+                [s.active]: isActive,
+                [s.selected]: isSelected
+            })}
+            onClick={ handlerClick }
+        >
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>

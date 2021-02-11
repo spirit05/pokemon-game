@@ -1,94 +1,77 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
 
-import { database } from '../../../../service/firebase';
+import { FireBaseContext } from '../../../../context/firebaseContext';
+import { PokemonContext } from '../../../../context/pokemonContext';
+
 
 import s from './StartPage.module.css';
 
-const DATA = {
-    "abilities": [
-        "keen-eye",
-        "tangled-feet",
-        "big-pecks"
-      ],
-      "stats": {
-        "hp": 63,
-        "attack": 60,
-        "defense": 55,
-        "special-attack": 50,
-        "special-defense": 50,
-        "speed": 71
-      },
-      "type": "flying",
-      "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png",
-      "name": "pidgeotto",
-      "base_experience": 122,
-      "height": 11,
-      "id": 'randomId',
-      "values": {
-        "top": "A",
-        "right": 2,
-        "bottom": 7,
-        "left": 5
-      }
-}
-
 export const StartPage = () => { 
+    const firebase = useContext(FireBaseContext);
+    const pokemonContext = useContext(PokemonContext);
     const [ cards, setCards ] = useState({});
 
-    const getCards = () => {
-        database.ref('pokemons').once('value', snapshot => {
-            setCards(snapshot.val());
-          });    
-    };
+    // Используется в асинхронноном варианте с once
+    // const getCards = async () => {
+    //     const responce = await firebase.getCardsOnce();
+    //     setCards(responce);    
+    // };
     
-    useEffect(()=> {
-          getCards();
+    useEffect(() => {
+        //С использованием soket
+        firebase.getCardSoket( pokemons => {
+            setCards(pokemons);
+        });
+
+        pokemonContext.onClearSelectedCard();
+
+        // Отписываемся от подписки на событие, т.к. мы не передаем второй аргумент useEffect, то отписка сработает когда компонент будет размотнирован
+        return () => firebase.ofCardSoket();
+        
+        // Асинхронный вариант с once
+        // getCards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);  
 
     const history = useHistory();
 
-    const handlerClick = (id) => {
-        //New solved
-        setCards(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = {...item[1]};
-                if (pokemon.id === id) {
-                    pokemon.active = !pokemon.active;
-                };
+    const handlerActiveSelected = (key) => {
+        const pokemon = {...cards[key]};
 
-                acc[item[0]] = pokemon;
+        pokemonContext.onSelectedPokemons(key, pokemon);
 
-                database.ref('pokemons/' + item[0]).set(pokemon);
-
-                return acc;
-            }, {});
-        });
+        setCards(prevState => ({
+            ...prevState,
+            [key]: {
+                ...prevState[key],
+                selected: !prevState[key].selected,
+            }
+        }))
     };
 
     const handlerBackHome = () => {
         history.push('/');
     }
 
-    const handlerAddPokemon = () => {
-        // A post entry.
-        const data = DATA;
-
-        // Get a key for a new Post.
-        const newPostKey = database.ref().child('pokemons').push().key;
-    
-        database.ref('pokemons/' + newPostKey).set(data).then(() => getCards());
+    const handlerStartGameClick = () => {
+        history.push('/game/board');
     }
 
     return (
         <>
             <div className={s.root}>
                 <h1>Let's started!!!!</h1>
-                <button onClick={ handlerAddPokemon } >Add new pokemon</button>
+                <button 
+                    onClick = { handlerStartGameClick }
+                    disabled = { Object.keys(pokemonContext.pokemons).length < 5}
+                >
+                    Start game
+                </button>
                 <div className={s.flex}>
                     {
-                        Object.entries(cards).map( ([key,{ id, name, img, type, values, active }]) => (
+                        Object.entries(cards).map( ([key,{ id, name, img, type, values, selected }]) => (
                             <PokemonCard 
                                 className={ s.card }
                                 key={ key }
@@ -98,7 +81,13 @@ export const StartPage = () => {
                                 type = { type }
                                 values = { values }
                                 isActive = { true }
-                                onChangeCard = { handlerClick }
+                                isSelected = { selected }
+                                onChangeCard = { () => { 
+                                        if (Object.keys(pokemonContext.pokemons).length < 5 || selected) {
+                                            handlerActiveSelected(key);
+                                        } 
+                                    }
+                                }
                             /> ))
                     }
                 </div>
