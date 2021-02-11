@@ -1,6 +1,6 @@
-import { useRouteMatch, Route, Switch } from "react-router-dom";
+import { useRouteMatch, Route, Switch, Redirect } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { PokemonContext } from "../../context/pokemonContext";
 
@@ -20,24 +20,20 @@ export const GamePage = () => {
                 delete copyState[key];
 
                 return copyState;
-            }
+            };
 
             return {
                 ...prevState, 
                 [key]: pokemon
-            }
-        })       
-    }
+            };
+        });      
+    };
 
     const clearSelectedCard = () => {
-        setSelectedCard(prevState => {
-            let copyState = {...prevState};
-
-            copyState = {};
-            
-            return copyState;
-        })
-    }
+        setSelectedCard(() => {
+            return {};
+        });
+    };
 
     return (
         <PokemonContext.Provider value={{
@@ -47,7 +43,13 @@ export const GamePage = () => {
         }}>
             <Switch>
                 <Route path={`${match.path}/`} exact component={StartPage}  />
-                <Route path={`${match.path}/board`} component={BoardPage} / >
+                {/* <Route path={`${match.path}/board`} component={BoardPage} / > */}
+                <Route path={`${match.path}/board`} render={() => {
+                    if(Object.keys(selectedCard).length < 5) {
+                        return <Redirect to='/game' />
+                    }
+                    return <BoardPage />
+                }} / >
                 <Route path={`${match.path}/finish`} component= {FinishPage} />
             </Switch>
         </PokemonContext.Provider>

@@ -32,6 +32,7 @@ export const StartPage = () => {
         
         // Асинхронный вариант с once
         // getCards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);  
 
     const history = useHistory();
