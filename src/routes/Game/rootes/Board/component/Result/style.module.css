@@ -1,0 +1,24 @@
+.result {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.btn {
+    display: block;
+    background-color: rgba(119, 31, 118, 0.7);
+    color: #fafafa;
+    font-size: 3rem;
+    font-weight: bold;
+    border-radius: 1rem;
+    border: none;
+    padding: 1rem 2rem;
+    margin: 1rem auto;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: rgba(119, 31, 118, 1);
+}

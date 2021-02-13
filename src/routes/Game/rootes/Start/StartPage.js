@@ -12,6 +12,7 @@ export const StartPage = () => {
     const firebase = useContext(FireBaseContext);
     const pokemonContext = useContext(PokemonContext);
     const [ cards, setCards ] = useState({});
+    const history = useHistory();
 
     // Используется в асинхронноном варианте с once
     // const getCards = async () => {
@@ -34,8 +35,6 @@ export const StartPage = () => {
         // getCards();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);  
-
-    const history = useHistory();
 
     const handlerActiveSelected = (key) => {
         const pokemon = {...cards[key]};
