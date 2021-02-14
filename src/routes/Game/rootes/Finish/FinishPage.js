@@ -43,8 +43,13 @@ export const FinishPage = () => {
         takedCard = copyCard;
     };
 
-    const checkCards = (takedCard) => {
-        return Object.values(cards).findIndex(item => item.id === takedCard.id)
+    const checkCards = card => {
+        if (card) {
+            return Object.values(cards).findIndex(item => item.id === card);
+        } else {
+            return 1;
+        }
+
     }
         
     const handlerBackStart = () => {

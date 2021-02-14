@@ -5,6 +5,7 @@ import PokemonCard from "../../../../components/PokemonCard/PokemonCard";
 import ArrowChoice from "./component/ArrowChoice/index";
 
 import { PokemonContext } from '../../../../context/pokemonContext';
+import { FetchGitContext } from '../../../../context/fetchGitContext';
 
 import s from './BoardPage.module.css';
 import { PlayerBoard } from './component/PlayerBoard/PlayerBoard';
@@ -30,12 +31,14 @@ const counterWin = ( board, player1, player2 ) => {
 
 export const BoardPage = () => {
     const { pokemons, player2Card, onChangeStatusGame } = useContext(PokemonContext);
+    const git = useContext(FetchGitContext);
 
     const [ board, setBoard ] = useState([]);
     const [ player1, setPlayer1 ] = useState( () => {
-        return Object.values(pokemons).map( item => ({
+        return Object.entries(pokemons).map(([ key, item ]) => ({
             ...item,
-            possession: 'blue'
+            possession: 'blue',
+            key: key
         }) )
     } );
     const [ player2, setPlayer2 ] = useState(player2Card);
@@ -50,16 +53,8 @@ export const BoardPage = () => {
         history.replace('/game');
     }
 
-    const getBoard = async () => {
-        const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
-        const boardRequest = await boardResponse.json();
-
-        
-        setBoard(boardRequest.data);
-    };
-
     useEffect(() => {
-        getBoard();
+        git.getBoard().then(data => setBoard(data));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -71,24 +66,15 @@ export const BoardPage = () => {
                 board
             };
             
-            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(params),
-            });
-
-            const request = await res.json();
-            
             if (choiceCard.player === 1) {
                 setPlayer1( prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
             if (choiceCard.player === 2) {
                 setPlayer2( prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
+            
+            await git.handlerLogicBoard(params).then(data => setBoard(data))
 
-            setBoard(request.data);
             setSteps( prevState => {
                 const count = prevState + 1;
 
@@ -103,7 +89,7 @@ export const BoardPage = () => {
             const [ count1, count2 ] = counterWin( board, player1, player2);
             
             if ( count1 > count2 ) {
-                setTimeout(() => history.replace('/game/finish'), 5000)
+                setTimeout(() => history.replace('/game/finish'), 2500)
                 setResult('win');
                 onChangeStatusGame('win');
             } else if ( count1 < count2 ) {

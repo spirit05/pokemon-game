@@ -8,17 +8,19 @@ import { PokemonContext } from '../../../../context/pokemonContext';
 
 import s from './StartPage.module.css';
 
+const handlerBackHome = history => {
+    history.push('/');
+}
+
+const handlerStartGameClick = history => {
+    history.push('/game/board');
+}
+
 export const StartPage = () => { 
     const firebase = useContext(FireBaseContext);
     const pokemonContext = useContext(PokemonContext);
     const [ cards, setCards ] = useState({});
     const history = useHistory();
-
-    // Используется в асинхронноном варианте с once
-    // const getCards = async () => {
-    //     const responce = await firebase.getCardsOnce();
-    //     setCards(responce);    
-    // };
     
     useEffect(() => {
         //С использованием soket
@@ -50,20 +52,12 @@ export const StartPage = () => {
         }))
     };
 
-    const handlerBackHome = () => {
-        history.push('/');
-    }
-
-    const handlerStartGameClick = () => {
-        history.push('/game/board');
-    }
-
     return (
         <>
             <div className={s.root}>
                 <h1>Let's started!!!!</h1>
                 <button 
-                    onClick = { handlerStartGameClick }
+                    onClick = { () => handlerStartGameClick(history) }
                     disabled = { Object.keys(pokemonContext.pokemons).length < 5}
                 >
                     Start game
@@ -90,7 +84,7 @@ export const StartPage = () => {
                             /> ))
                     }
                 </div>
-                <button onClick={ handlerBackHome } >Back Home Page</button>
+                <button onClick={ () => handlerBackHome(history) } >Back Home Page</button>
             </div>
         </>
     );

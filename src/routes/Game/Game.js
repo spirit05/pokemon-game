@@ -1,32 +1,33 @@
 import { useRouteMatch, Route, Switch } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { PokemonContext } from "../../context/pokemonContext";
+import { FetchGitContext } from "../../context/fetchGitContext";
 
 import { StartPage } from './rootes/Start/StartPage';
 import { BoardPage } from './rootes/Board/BoardPage';
 import { FinishPage } from './rootes/Finish/FinishPage';
 
+const getPlayer2 = ( git, setPlayer2 ) => {
+    git.getPlayer2Card().then(data => {
+        setPlayer2( () => {
+            return data.map( item => ({
+                    ...item,
+                    possession: 'red',
+                }));
+            } );
+    });
+}
+
 export const GamePage = () => {
+    const git = useContext(FetchGitContext);
     const [selectedCard, setSelectedCard] = useState({});
     const [ player2, setPlayer2] = useState([]);
     const [ statusGame, setStatusGame ] = useState(null);
 
-    const getPlayer2Card = async () => {
-        const player2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player');
-        const player2Request = await player2Response.json();
-        
-        setPlayer2( () => {
-            return player2Request.data.map( item => ({
-                ...item,
-                possession: 'red',
-            }));
-        } );
-    };
-
     useEffect(() => {
-        getPlayer2Card();
+        getPlayer2(git, setPlayer2);
     }, []);
 
     const match = useRouteMatch();
@@ -49,7 +50,7 @@ export const GamePage = () => {
 
     const clearSelectedCard = () => {
         setSelectedCard({});
-        getPlayer2Card();
+        getPlayer2(git, setPlayer2);
         setStatusGame(null);
     };
 

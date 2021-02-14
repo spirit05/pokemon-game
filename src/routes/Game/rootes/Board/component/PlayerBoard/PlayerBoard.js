@@ -16,7 +16,7 @@ export const PlayerBoard = ({ player, cards, onClickCard }) => {
             {
                 cards.map( item  => (
                     <div 
-                        key={ item.id }
+                        key={ item.key || item.id }
                         className={ cn(s.cardBoard, {
                             [s.selected]: isSelected === item.id
                         }) }

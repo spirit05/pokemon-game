@@ -9,7 +9,9 @@ import Footer from "./components/Footer/Footer";
 import { NotFound } from "./routes/NotFound/NotFound";
 
 import { FireBaseContext } from './context/firebaseContext';
+import { FetchGitContext } from './context/fetchGitContext';
 import Firebase from "./service/firebase";
+import FetchGit from "./service/fetchGit";
 
 
 const App = () => {
@@ -19,6 +21,7 @@ const App = () => {
 
   return (
     <FireBaseContext.Provider value={new Firebase()}>
+    <FetchGitContext.Provider value={new FetchGit()}>
       <Switch>
         <Route path='/404' component={ NotFound } />
 
@@ -44,6 +47,7 @@ const App = () => {
 
         </Route>
       </Switch>
+    </FetchGitContext.Provider>
     </FireBaseContext.Provider>
   )
 };
