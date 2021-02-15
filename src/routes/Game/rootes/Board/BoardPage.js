@@ -81,6 +81,7 @@ export const BoardPage = () => {
                 return count;
             })
         } 
+
         setChoiceCard([]);
     }
 
@@ -103,13 +104,15 @@ export const BoardPage = () => {
 
     return (
         <div className={ s.root }>
-            <ArrowChoice isArrowActive={ arrowActive } />
+            <ArrowChoice 
+                isArrowActive={ arrowActive }
+            />
 			<div className={ s.playerOne }>
                 <PlayerBoard 
                     player={ 1 }
                     cards={ player1 }
                     onClickCard={ card => {
-                        if(arrowActive) setArrowActive(prevState => !prevState);
+                        if( arrowActive) setArrowActive(false);
                         setChoiceCard(card) 
                     }}
                 />
@@ -133,7 +136,10 @@ export const BoardPage = () => {
                 <PlayerBoard
                     player={ 2 } 
                     cards={ player2 }
-                    onClickCard={ card => setChoiceCard(card) }
+                    onClickCard={ card => {
+                        if( arrowActive) setArrowActive(false);
+                        setChoiceCard(card) 
+                    }}
                 />
             </div>
             {

@@ -42,6 +42,10 @@
     background-color: rgb(159, 231, 24);
 }
 
+.info {
+    position: relative;
+}
+
 @media (max-width: 1320px) {
     .player {
         height: 30vw;

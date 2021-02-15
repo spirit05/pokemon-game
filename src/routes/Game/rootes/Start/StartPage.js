@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from "react-router-dom";
+
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
+import { Button } from "../../../../components/Button/Button";
 
 import { FireBaseContext } from '../../../../context/firebaseContext';
 import { PokemonContext } from '../../../../context/pokemonContext';
@@ -8,19 +10,13 @@ import { PokemonContext } from '../../../../context/pokemonContext';
 
 import s from './StartPage.module.css';
 
-const handlerBackHome = history => {
-    history.push('/');
-}
-
-const handlerStartGameClick = history => {
-    history.push('/game/board');
-}
-
 export const StartPage = () => { 
     const firebase = useContext(FireBaseContext);
     const pokemonContext = useContext(PokemonContext);
     const [ cards, setCards ] = useState({});
     const history = useHistory();
+
+    const countSelectedPokemons = Object.keys(pokemonContext.pokemons).length;
     
     useEffect(() => {
         //С использованием soket
@@ -52,16 +48,19 @@ export const StartPage = () => {
         }))
     };
 
+    const handlerStartGameClick = () => {
+        history.push('/game/board');
+    }
+
+    const handlerBackHome = () => {
+        history.push('/');
+    }
+
     return (
         <>
             <div className={s.root}>
-                <h1>Let's started!!!!</h1>
-                <button 
-                    onClick = { () => handlerStartGameClick(history) }
-                    disabled = { Object.keys(pokemonContext.pokemons).length < 5}
-                >
-                    Start game
-                </button>
+                <div className={s.start} >
+                <h1>Let's started!!!! Select 5 cards.</h1>
                 <div className={s.flex}>
                     {
                         Object.entries(cards).map( ([key,{ id, name, img, type, values, selected }]) => (
@@ -76,7 +75,7 @@ export const StartPage = () => {
                                 isActive = { true }
                                 isSelected = { selected }
                                 onChangeCard = { () => { 
-                                        if (Object.keys(pokemonContext.pokemons).length < 5 || selected) {
+                                        if (countSelectedPokemons < 5 || selected) {
                                             handlerActiveSelected(key);
                                         } 
                                     }
@@ -84,7 +83,49 @@ export const StartPage = () => {
                             /> ))
                     }
                 </div>
-                <button onClick={ () => handlerBackHome(history) } >Back Home Page</button>
+                </div>
+                <div className={ s.selectedBox }>            
+                    <div className={s.selectedPokemon}>
+                        {
+                            Object.entries(pokemonContext.pokemons).map( ([key,{ id, name, img, type, values, selected }]) => (
+                                <PokemonCard 
+                                    className={ s.selectedCard }
+                                    key={ key }
+                                    name = { name }
+                                    id = { id } 
+                                    img = { img }
+                                    type = { type }
+                                    value = { false }
+                                    values = { values }
+                                    isActive = { true }
+                                    minimize
+                                    isSelected = { selected }
+                                    onChangeCard = { () => { 
+                                            if (countSelectedPokemons <= 5 || selected) {
+                                                handlerActiveSelected(key);
+                                            } 
+                                        }
+                                    }
+                                /> ))
+                        }
+                    </div>
+                    {
+                        countSelectedPokemons === 5 ? 
+                        (<Button 
+                            cb={handlerStartGameClick}
+                            className={ s.startBtn }
+                            title={ 'Start game' }
+                        />) :
+                        (<>
+                            <h3>Selected pokemon { countSelectedPokemons }</h3>
+                            <Button 
+                                cb={handlerBackHome}
+                                className={ s.startBtn }
+                                title={ 'Back Home Page' }
+                            />
+                        </>)
+                    }
+                </div>
             </div>
         </>
     );

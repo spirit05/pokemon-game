@@ -20,6 +20,10 @@ footer .wrapper {
     justify-content: space-between;
 }
 
+.hide {
+    display: none;
+}
+
 @media only screen and (max-width: 649px) {
     footer .wrapper {
         flex-direction: column;

@@ -1,0 +1,82 @@
+.alert {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 650px;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    left: calc(50% - 325px);
+    background-color: #fafafa;
+    border: solid 2px red;
+    z-index: 999;
+    border-color: #dc3545;
+    padding-right: calc(1.5em + .75rem);
+    background-image: url('./assets/download.svg');
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .1875rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+.alertTitle {
+
+}
+
+.alertBtn {
+
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btnInfo {
+    color: #000;
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+.btnInfo:hover {
+    color: #000;
+    background-color: #31d2f2;
+    border-color: #25cff2;
+}
+
+.btnAdd {
+    color: #fafafa;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btnAdd:hover {
+    color: #fafafa;
+    background-color: #44494c;
+    border-color: #44494c;
+}
+
+.btnSkip {
+    color: #000;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btnSkip:hover {
+    color: #000;
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+@media (max-width: 750px) {
+    .alert {
+        width: 300px;
+        height: auto;
+        flex-wrap: wrap;
+        left: calc(50% - 150px);
+        text-align: center;
+    }
+}

@@ -18,6 +18,7 @@ const App = () => {
   // useLocation дает информацию о том на какой странице мы ходимся
   const location  = useLocation();
   const isPadding = location.pathname === '/' || location.pathname === '/game/board'; 
+  const isActive = location.pathname === '/game/board'; 
 
   return (
     <FireBaseContext.Provider value={new Firebase()}>
@@ -42,7 +43,9 @@ const App = () => {
               
             </Switch>
 
-            <Footer />
+            <Footer 
+              active={ isActive }            
+            />
           </>
 
         </Route>
