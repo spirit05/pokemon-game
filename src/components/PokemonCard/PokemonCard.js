@@ -7,11 +7,13 @@ const PokemonCard = ( {
     id, 
     img, 
     type, 
+    value = true,
     values, 
     onChangeCard,
     minimize,
     className, 
-    isSelected,
+    possession,
+    isSelected = false,
     isActive = false
 } ) => {
 
@@ -29,14 +31,22 @@ const PokemonCard = ( {
         >
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
-                    <div className={cn(s.pokemon, s[type])}>
-                        <div className={s.values}>
+                    <div className={cn(s.pokemon, s[type], s[possession])}>
+                        <div className={cn({
+                            [s.values]: value === true,
+                            [s.selectValues]: value === false,
+                        })}
+                        >
                             <div className={cn(s.count, s.top)}>{values.top}</div>
                             <div className={cn(s.count, s.right)}>{values.right}</div>
                             <div className={cn(s.count, s.bottom)}>{values.bottom}</div>
                             <div className={cn(s.count, s.left)}>{values.left}</div>
                         </div>
-                        <div className={s.imgContainer}>
+                        <div className={cn({
+                            [s.imgContainer]: value === true,
+                            [s.selectimgContainer]: value === false,
+                        })}
+                        >
                             <img src={img} alt={name} />
                         </div>
                         { !minimize && (<div className={s.info}>

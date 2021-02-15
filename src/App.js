@@ -9,16 +9,20 @@ import Footer from "./components/Footer/Footer";
 import { NotFound } from "./routes/NotFound/NotFound";
 
 import { FireBaseContext } from './context/firebaseContext';
+import { FetchGitContext } from './context/fetchGitContext';
 import Firebase from "./service/firebase";
+import FetchGit from "./service/fetchGit";
 
 
 const App = () => {
   // useLocation дает информацию о том на какой странице мы ходимся
   const location  = useLocation();
   const isPadding = location.pathname === '/' || location.pathname === '/game/board'; 
+  const isActive = location.pathname === '/game/board'; 
 
   return (
     <FireBaseContext.Provider value={new Firebase()}>
+    <FetchGitContext.Provider value={new FetchGit()}>
       <Switch>
         <Route path='/404' component={ NotFound } />
 
@@ -39,11 +43,14 @@ const App = () => {
               
             </Switch>
 
-            <Footer />
+            <Footer 
+              active={ isActive }            
+            />
           </>
 
         </Route>
       </Switch>
+    </FetchGitContext.Provider>
     </FireBaseContext.Provider>
   )
 };
