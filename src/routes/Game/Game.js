@@ -28,6 +28,7 @@ export const GamePage = () => {
 
     useEffect(() => {
         getPlayer2(git, setPlayer2);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const match = useRouteMatch();
