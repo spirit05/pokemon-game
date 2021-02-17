@@ -1,15 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import fetchGitClass from '../../../../service/fetchGit';
+
+import { playerOne } from '../../../../store/playerOne';
+import { selectPlayerTwo } from '../../../../store/playerTwo';
 
 import PokemonCard from "../../../../components/PokemonCard/PokemonCard";
 import ArrowChoice from "./component/ArrowChoice/index";
-
-import { PokemonContext } from '../../../../context/pokemonContext';
-import { FetchGitContext } from '../../../../context/fetchGitContext';
-
-import s from './BoardPage.module.css';
 import { PlayerBoard } from './component/PlayerBoard/PlayerBoard';
 import Result from './component/Result';
+
+import s from './BoardPage.module.css';
 
 const counterWin = ( board, player1, player2 ) => {
     let playerCountOne = player1.length;
@@ -29,9 +32,13 @@ const counterWin = ( board, player1, player2 ) => {
     return [playerCountOne, playerCountTwo];
 }
 
+const randomPlayerStart = action => {
+    setTimeout(() => action(Math.round( Math.random()) + 1), 3000);
+}
+
 export const BoardPage = () => {
-    const { pokemons, player2Card, onChangeStatusGame } = useContext(PokemonContext);
-    const git = useContext(FetchGitContext);
+    const pokemons = useSelector(playerOne);
+    const playerTwo = useSelector(selectPlayerTwo);
 
     const [ board, setBoard ] = useState([]);
     const [ player1, setPlayer1 ] = useState( () => {
@@ -41,9 +48,10 @@ export const BoardPage = () => {
             key: key
         }) )
     } );
-    const [ player2, setPlayer2 ] = useState(player2Card);
+    const [ player2, setPlayer2 ] = useState([]);
     const [ choiceCard, setChoiceCard ] = useState([]);
     const [ arrowActive, setArrowActive ] = useState(true);
+    const [ arrowSide, setArrowSide ] = useState(0);
     const [ steps, setSteps ] = useState(0);
     const [ result, setResult ] = useState(null);
     
@@ -54,11 +62,13 @@ export const BoardPage = () => {
     }
 
     useEffect(() => {
-        git.getBoard().then(data => setBoard(data));
+        setPlayer2(playerTwo);
+        randomPlayerStart(setArrowSide);
+        fetchGitClass.getBoard().then(data => setBoard(data));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const hendlerClickBoardPlate = async position => {
+    const handlerClickBoardPlate = async position => {
         if (choiceCard.id) {
             const params = {
                 position,
@@ -67,13 +77,13 @@ export const BoardPage = () => {
             };
             
             if (choiceCard.player === 1) {
-                setPlayer1( prevState => prevState.filter(item => item.id !== choiceCard.id));
+                setPlayer1( prevState => prevState.filter(item => item.key !== choiceCard.key || item.id !== choiceCard.id));
             }
             if (choiceCard.player === 2) {
                 setPlayer2( prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
             
-            await git.handlerLogicBoard(params).then(data => setBoard(data))
+            await fetchGitClass.handlerLogicBoard(params).then(data => setBoard(data))
 
             setSteps( prevState => {
                 const count = prevState + 1;
@@ -82,6 +92,8 @@ export const BoardPage = () => {
             })
         } 
 
+        setArrowSide(prev => prev === 1 ? 2 : 1)
+        setArrowActive(true)
         setChoiceCard([]);
     }
 
@@ -92,7 +104,6 @@ export const BoardPage = () => {
             if ( count1 > count2 ) {
                 setTimeout(() => history.replace('/game/finish'), 2500)
                 setResult('win');
-                onChangeStatusGame('win');
             } else if ( count1 < count2 ) {
                 setResult('lose');
             } else {
@@ -104,17 +115,15 @@ export const BoardPage = () => {
 
     return (
         <div className={ s.root }>
-            <ArrowChoice 
-                isArrowActive={ arrowActive }
-            />
 			<div className={ s.playerOne }>
                 <PlayerBoard 
                     player={ 1 }
                     cards={ player1 }
-                    onClickCard={ card => {
+                    onClickCard={ (card) => {
                         if( arrowActive) setArrowActive(false);
                         setChoiceCard(card) 
                     }}
+                    step={ arrowSide }
                 />
             </div>
             <div className={ s.board }>
@@ -123,7 +132,7 @@ export const BoardPage = () => {
                         <div 
                             key={ item.position }
                             className={ s.boardPlate }
-                            onClick={() => !item.card && hendlerClickBoardPlate(item.position)}
+                            onClick={() => !item.card && handlerClickBoardPlate(item.position)}
                         >
                             { 
                                 item.card && <PokemonCard {...item.card} isActive minimize />
@@ -136,12 +145,21 @@ export const BoardPage = () => {
                 <PlayerBoard
                     player={ 2 } 
                     cards={ player2 }
-                    onClickCard={ card => {
+                    onClickCard={ (card) => {
                         if( arrowActive) setArrowActive(false);
                         setChoiceCard(card) 
                     }}
+                    step={ arrowSide }
                 />
             </div>
+            {
+                steps < 9 ? (
+                    <ArrowChoice 
+                        stop={ arrowActive }
+                        side={ arrowSide }
+                    />
+                ) : ''
+            }
             {
                 steps === 9 ? <Result type={ result } /> : ''                
             }

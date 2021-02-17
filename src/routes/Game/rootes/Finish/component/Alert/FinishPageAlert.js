@@ -1,14 +1,12 @@
 import { useHistory } from "react-router-dom";
-import { useContext } from "react";
-
-import { FireBaseContext } from "../../../../../../context/firebaseContext";
 
 import cn from 'classnames';
 import s from "./finishPageAlert.module.css";
+import fireBaseClass from "../../../../../../service/firebase";
 
-export const FinishPageAlert = ({ cb, card }) => {
+export const FinishPageAlert = ({ cb, card = false }) => {
     const history = useHistory();
-    const fire = useContext(FireBaseContext);
+    const fire = fireBaseClass;
 
     const handlerAddCard = () =>{
         fire.addCard(card);
@@ -21,7 +19,7 @@ export const FinishPageAlert = ({ cb, card }) => {
 
     return (
         <div className={ s.alert }>
-            <h3>This card is already in your collection!</h3>
+            <h3>{ !card ? 'Card no selected!' : 'This card is already in your collection!'}</h3>
             <div>
                 <button className={ cn( s.btn, s.btnInfo )  } onClick={ () => cb() }>Choose another card</button>
                 {
@@ -34,7 +32,7 @@ export const FinishPageAlert = ({ cb, card }) => {
                     </button>
                     )
                 }
-                <button className={ cn( s.btn, s.btnSkip )  } onClick={ handlerBackStart }>Not add any card</button>
+                <button className={ cn( s.btn, s.btnSkip )  } onClick={ handlerBackStart }>I don't need these cards</button>
             </div>
         </div>
     )

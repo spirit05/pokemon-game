@@ -1,0 +1,94 @@
+@keyframes codebeauty {
+    0%{
+        top: -11vw;
+    }
+    50%{ 
+        top: 0px;
+    }
+    75%{
+        top: -30px;
+    }
+    100%{
+        top: 0px
+    }
+}
+
+@keyframes spin {
+    0%{
+        transform: rotateZ(0deg);
+        margin-left: 0;
+    }
+    50%{
+        transform: rotateZ(360deg);
+        margin-left: 300px;
+    }
+    100%{
+        transform: rotateZ(0deg);
+        margin-left: 0;
+    }
+}
+
+@keyframes buttonglow {
+    0%{
+        background-color: #7f8c8d;
+    }
+    50%{
+        background-color: red;
+    }
+    100%{
+        background-color: #7f8c8d;
+    }
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mainball {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    background-color: #fff;
+    border: 6px solid #000;
+    border-radius: 50%;
+    overflow: hidden;
+    animation: codebeauty .25s ease-in-out,
+               spin 4s ease-in-out infinite;
+}
+
+.mainball::before,
+.mainball::after {
+    content: '';
+    position: absolute;
+}
+
+.mainball::before {
+    background-color: red;
+    width: 100%;
+    height: 50%;
+}
+
+.mainball::after {
+    top: calc(50% - 3px);
+    width: 100%;
+    height: 6px;
+    background-color: #000;
+}
+
+.pokebutton {
+    position: absolute;
+    top: calc(50% - 12px);
+    left: calc(50% - 12px);
+    width: 24px;
+    height: 24px;
+    background-color: #7f8c8d;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 0 3px #000;
+    animation:  buttonglow 3s ease-in-out infinite;
+}
+

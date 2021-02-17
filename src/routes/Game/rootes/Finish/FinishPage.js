@@ -1,30 +1,25 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PokemonCard from "../../../../components/PokemonCard/PokemonCard";
-import { FireBaseContext } from "../../../../context/firebaseContext";
-import { PokemonContext } from "../../../../context/pokemonContext";
+import fireBaseClass from "../../../../service/firebase";
+import { selectPokemonsData } from "../../../../store/pokemon";
+import { playerOne } from "../../../../store/playerOne";
 import { FinishPageAlert } from "./component/Alert/FinishPageAlert";
 
 import s from './FinishPage.module.css';
+import { selectPlayerTwo } from "../../../../store/playerTwo";
 
 export const FinishPage = () => {
-    const { pokemons: player1, player2Card: player2 } = useContext(PokemonContext);
-    const [ selectedCard, setSelectedCard ] = useState(player2);
+    const player2  = useSelector(selectPlayerTwo);
+    const player1 = useSelector(playerOne);
+    const pokemonInBase = useSelector(selectPokemonsData); 
+
+    const [ selectedCard, setSelectedCard ] = useState([]);
     const [ takedCard, setTakedCard ] = useState(null);
-    const [ cards, setCards ] = useState({});
     const [ alert, setAlert ] = useState(null);
 
-    const fire = useContext(FireBaseContext);
-
-    const getCards = async () => {
-        const responce = await fire.getCardsOnce();
-        setCards(responce);    
-    };
-
-    useEffect(() => {
-        getCards();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    const fire = fireBaseClass;
 
     const history = useHistory();
 
@@ -32,20 +27,24 @@ export const FinishPage = () => {
         history.replace('/game');
     }
 
+    useEffect(() => {
+        setSelectedCard(player2);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const handlerClickTakedCard = card => {
-        setSelectedCard(prevState => prevState.map( item => {
-            item.id === card.id ? item.selected = true : item.selected = false;
-            return item
-        }));
+        setSelectedCard(prevState => prevState.map( item => ({
+            ...item,
+            selected: item.id === card.id ? true : false,
+        })));
 
-        const copyCard = {...card};
-        delete copyCard.selected;
+        delete card.selected;
 
-        setTakedCard(copyCard);
+        setTakedCard(card);
     };
 
     const checkCards = card => {
-        return Object.values(cards).findIndex(item => item.id === card.id);
+        return Object.values(pokemonInBase).findIndex(item => item.id === card.id);
     }
         
     const handlerBackStart = () => {

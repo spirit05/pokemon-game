@@ -1,43 +1,61 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
 import { Button } from "../../../../components/Button/Button";
 
-import { FireBaseContext } from '../../../../context/firebaseContext';
-import { PokemonContext } from '../../../../context/pokemonContext';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemon';
+import { setPlayerOne } from '../../../../store/playerOne';
+import { getPlayerTwoAsync } from '../../../../store/playerTwo';
 
 import s from './StartPage.module.css';
+import { Loading } from './component/Loading/Loading';
 
 export const StartPage = () => { 
-    const firebase = useContext(FireBaseContext);
-    const pokemonContext = useContext(PokemonContext);
+    const pokemonsRedux = useSelector(selectPokemonsData);
+    const isLoading = useSelector(selectPokemonsLoading);
+    const dispatch = useDispatch();
+    
+    const [selectedCard, setSelectedCard] = useState({});
     const [ cards, setCards ] = useState({});
+
     const history = useHistory();
 
-    const countSelectedPokemons = Object.keys(pokemonContext.pokemons).length;
+    const countSelectedPokemons = Object.keys(selectedCard).length;
     
     useEffect(() => {
-        //С использованием soket
-        firebase.getCardSoket( pokemons => {
-            setCards(pokemons);
-        });
+        dispatch(getPokemonsAsync());
+        dispatch(getPlayerTwoAsync())
 
-        pokemonContext.onClearSelectedCard();
+        dispatch(setPlayerOne({}));
+        setSelectedCard({});
 
-        // Отписываемся от подписки на событие, т.к. мы не передаем второй аргумент useEffect, то отписка сработает когда компонент будет размотнирован
-        return () => firebase.ofCardSoket();
-        
-        // Асинхронный вариант с once
-        // getCards();
+
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);  
+
+    useEffect(() => {
+        setCards(pokemonsRedux);
+    },[pokemonsRedux])
 
     const handlerActiveSelected = (key) => {
         const pokemon = {...cards[key]};
 
-        pokemonContext.onSelectedPokemons(key, pokemon);
+        setSelectedCard(prevState => {
+            if (prevState[key]) {
+                const copyState = {...prevState};
+                delete copyState[key];
+
+                return copyState;
+            };
+
+            return {
+                ...prevState, 
+                [key]: pokemon
+            };
+        });
 
         setCards(prevState => ({
             ...prevState,
@@ -49,6 +67,7 @@ export const StartPage = () => {
     };
 
     const handlerStartGameClick = () => {
+        dispatch(setPlayerOne(selectedCard));
         history.push('/game/board');
     }
 
@@ -61,6 +80,13 @@ export const StartPage = () => {
             <div className={s.root}>
                 <div className={s.start} >
                 <h1>Let's started!!!! Select 5 cards.</h1>
+                {
+                    isLoading ? 
+                    (
+                        <Loading />
+                    ) :
+                    ''
+                }
                 <div className={s.flex}>
                     {
                         Object.entries(cards).map( ([key,{ id, name, img, type, values, selected }]) => (
@@ -87,7 +113,7 @@ export const StartPage = () => {
                 <div className={ s.selectedBox }>            
                     <div className={s.selectedPokemon}>
                         {
-                            Object.entries(pokemonContext.pokemons).map( ([key,{ id, name, img, type, values, selected }]) => (
+                            Object.entries(selectedCard).map( ([key,{ id, name, img, type, values, selected }]) => (
                                 <PokemonCard 
                                     className={ s.selectedCard }
                                     key={ key }
