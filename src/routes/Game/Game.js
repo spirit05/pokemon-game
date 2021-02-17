@@ -6,6 +6,7 @@ import { FinishPage } from './rootes/Finish/FinishPage';
 
 export const GamePage = () => {
 
+
     const match = useRouteMatch();
 
     return (
