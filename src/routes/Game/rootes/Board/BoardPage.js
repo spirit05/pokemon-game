@@ -30,13 +30,10 @@ const counterWin = ( board, player1, player2 ) => {
     });
 
     return [playerCountOne, playerCountTwo];
-}
-
-const randomPlayerStart = action => {
-    setTimeout(() => action(Math.round( Math.random()) + 1), 3000);
-}
+};
 
 export const BoardPage = () => {
+
     const pokemons = useSelector(playerOne);
     const playerTwo = useSelector(selectPlayerTwo);
 
@@ -57,19 +54,33 @@ export const BoardPage = () => {
     
     const history = useHistory();
 
+    const timer = () => {
+        const random = Math.round( Math.random()) + 1;
+        setArrowSide(random);
+    };
+
     if (Object.keys(pokemons).length < 5) { 
         history.replace('/game');
     }
 
     useEffect(() => {
         setPlayer2(playerTwo);
-        randomPlayerStart(setArrowSide);
+
         fetchGitClass.getBoard().then(data => setBoard(data));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        
+        setTimeout(timer, 3000);
+
+        return () => {
+            clearTimeout(timer);
+            setBoard([]);
+          }
+
+    }, [playerTwo]);
 
     const handlerClickBoardPlate = async position => {
+
         if (choiceCard.id) {
+
             const params = {
                 position,
                 card: choiceCard,
@@ -83,19 +94,19 @@ export const BoardPage = () => {
                 setPlayer2( prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
             
-            await fetchGitClass.handlerLogicBoard(params).then(data => setBoard(data))
+            await fetchGitClass.handlerLogicBoard(params).then(data => setBoard(data));
 
             setSteps( prevState => {
                 const count = prevState + 1;
 
                 return count;
-            })
+            });
         } 
 
-        setArrowSide(prev => prev === 1 ? 2 : 1)
-        setArrowActive(true)
+        setArrowSide(prev => prev === 1 ? 2 : 1);
+        setArrowActive(true);
         setChoiceCard([]);
-    }
+    };
 
     useEffect( () => {
         if (steps === 9) {
@@ -111,7 +122,7 @@ export const BoardPage = () => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [steps])
+    }, [steps]);
 
     return (
         <div className={ s.root }>
@@ -128,17 +139,19 @@ export const BoardPage = () => {
             </div>
             <div className={ s.board }>
                 {
-                    board.map(item => (
-                        <div 
-                            key={ item.position }
-                            className={ s.boardPlate }
-                            onClick={() => !item.card && handlerClickBoardPlate(item.position)}
-                        >
-                            { 
-                                item.card && <PokemonCard {...item.card} isActive minimize />
-                            }
-                        </div>
-                    ))
+                    board.map(
+                        item => (
+                            <div 
+                                key={ item.position }
+                                className={ s.boardPlate }
+                                onClick={() => !item.card && handlerClickBoardPlate(item.position)}
+                            >
+                                { 
+                                    item.card && <PokemonCard {...item.card} isActive minimize />
+                                }
+                            </div>
+                        )
+                    )
                 }
             </div>
             <div className={ s.playerTwo }>
@@ -153,7 +166,8 @@ export const BoardPage = () => {
                 />
             </div>
             {
-                steps < 9 ? (
+                steps < 9 ? 
+                (
                     <ArrowChoice 
                         stop={ arrowActive }
                         side={ arrowSide }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { Menu } from "./Menu/Menu";
 import { NavBar } from "./Navbar/NavBar";
 
@@ -6,6 +7,7 @@ export const MenuHeader = ( { bgActive } ) => {
     const [isMenuActive, setMenuActive] = useState(null);
 
     const handlerChangeMenu = () => {
+
         setMenuActive(prevState => !prevState);
     };
 
@@ -18,7 +20,7 @@ export const MenuHeader = ( { bgActive } ) => {
             <NavBar 
                 id="navbar"
                 isMenuActive={ isMenuActive }
-                bgActive={bgActive}
+                bgActive={ bgActive }
                 onChangeMenu={ handlerChangeMenu }
             />
         </>

@@ -14,14 +14,14 @@
 }
 
 .rightSide {
+    animation: none;
     transform: rotateY(0deg) translateX(25vw);
-    animation: transform ease-in-out 1s;
 
 }
 
 .leftSide {
+    animation: none;
     transform: rotateY(180deg) translateX(22vw);
-    animation: transform ease-in-out 1s;
 }
 
 @keyframes spin {

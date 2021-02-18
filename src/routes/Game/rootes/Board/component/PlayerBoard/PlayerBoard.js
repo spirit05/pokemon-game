@@ -11,36 +11,38 @@ export const PlayerBoard = ({ player, cards, onClickCard, step }) => {
     return (
         <>
             {
-                cards.map( ( item, index )  => (
-                    <div 
-                        key={ item.key || `${item.id}${index}` }
-                        className={ cn(s.cardBoard, {
-                            [s.selected]: isSelected === item.key || isSelected === item.id
-                        }) }
-                        onClick={ () => {
-                            if (player === step) {
-                                setSelected(item.key || item.id);
-                                onClickCard && onClickCard( {
-                                    player,
-                                    ...item
-                                });
-                            }
-                        }}
+                cards.map( 
+                    ( item, index )  => (
+                        <div 
+                            key={ item.key || `${item.id}${index}` }
+                            className={ cn(s.cardBoard, {
+                                [s.selected]: isSelected === item.key || isSelected === item.id
+                            }) }
+                            onClick={ () => {
+                                if (player === step) {
+                                    setSelected(item.key || item.id);
+                                    onClickCard && onClickCard( {
+                                        player,
+                                        ...item
+                                    });
+                                }
+                            }}
 
-                    >
-                        <PokemonCard 
-                            className={ s.card }
-                            name = { item.name }
-                            id = { item.id } 
-                            img = { item.img }
-                            type = { item.type }
-                            values = { item.values }
-                            minimize
-                            isActive
-                        /> 
-                    </div>
-                ))
+                        >
+                            <PokemonCard 
+                                className={ s.card }
+                                name = { item.name }
+                                id = { item.id } 
+                                img = { item.img }
+                                type = { item.type }
+                                values = { item.values }
+                                minimize
+                                isActive
+                            /> 
+                        </div>
+                    )
+                )
             }
         </>    
     )
-}
+};

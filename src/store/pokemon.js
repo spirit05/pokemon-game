@@ -1,5 +1,6 @@
-// чтобs использоввать одно из состояний нашего стора, мы должны использовать createSlice
+// чтобs coздать одно из состояний нашего стора, мы должны использовать createSlice
 import { createSlice } from '@reduxjs/toolkit';
+
 import fireBaseClass from '../service/firebase';
 
 export const slice = createSlice({
@@ -26,7 +27,7 @@ export const slice = createSlice({
             error: action.payload
         })
     }
-})
+});
 
 export const { fetchPokemon, fetchPokemonResolve, fetchPokemonReject } = slice.actions;
 
@@ -36,8 +37,10 @@ export const selectPokemonsData = state => state.pokemons.data;
 
 export const getPokemonsAsync = () => async dispatch => {
     dispatch(fetchPokemon());
+
     const data = await fireBaseClass.getCardsOnce();
+
     dispatch(fetchPokemonResolve(data));
-}
+};
 
 export default slice.reducer;
