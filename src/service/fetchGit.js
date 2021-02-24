@@ -37,4 +37,6 @@ class FetchGit {
 
 }
 
-export default FetchGit;
+const fetchGitClass = new FetchGit();
+
+export default fetchGitClass;

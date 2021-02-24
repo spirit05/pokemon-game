@@ -1,0 +1,58 @@
+.selectedBox {
+    position: fixed;
+    bottom: 3vw;
+    left: 0;
+    width: 20vw;
+    min-height: 50vh;
+    text-align: center;
+    z-index: 99999;
+}
+
+.selectedPokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+}
+
+.selectedCard {
+    width: 18vw;
+    height: 15vh;
+    margin-bottom: 5px;
+}
+
+.startBtn {
+    cursor: pointer;
+    background-color: limegreen;
+    border: none;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    margin: 10px;
+}
+
+.startBtn:hover {
+    background-color: transparent;
+    border: 1px solid limegreen;
+}
+
+@media only screen and (max-width: 690px) {
+    .flex {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 10vw;
+    }
+
+    .startBtn {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .card {
+        width: 80%;
+        height: 260px;
+        cursor: pointer;
+    }
+}

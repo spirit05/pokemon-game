@@ -8,7 +8,9 @@ const Header = ({ title, descr }) => {
     const history = useHistory();
 
     const handlerClick = () => {
+
         history.push('/game');
+        
     }
 
     return (

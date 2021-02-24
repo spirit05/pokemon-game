@@ -1,5 +1,3 @@
-import { useHistory } from "react-router-dom";
-
 import Header from "../../components/Header/Header";
 import Layout from "../../components/Layout/Layout";
 
@@ -8,20 +6,12 @@ import s from './home.module.css';
 import bg2 from '../../img/bg2.jpg';
 import logoImg from '../../img/logo.png';
 
-
 const HomePage = () => {
-    const history = useHistory();
-    
-    const handlerClickButton = (page) => {
-        history.push(page);
-    }
-
   return (
     <>
       <Header 
         title= 'Pokemon Game'
         descr="This is simple triple triad card game"
-        onClickButton={handlerClickButton}
       />
       <Layout 
         id="1"

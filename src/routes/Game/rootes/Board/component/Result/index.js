@@ -1,13 +1,16 @@
 import {useState, useEffect} from 'react';
+import { useHistory } from 'react-router-dom';
+
 import s from './style.module.css';
+
 import YouWin from './assets/you-win.png';
 import YouLose from './assets/you-lose.png';
 import Draw from './assets/draw.png';
-import { useHistory } from 'react-router-dom';
 
 const Result = ({ type }) => {
    const [url, setUrl] = useState(null);
-   const [tryAgaian, setTryAgaian] = useState(null);
+   const [tryAgain, setTryAgain] = useState(null);
+
    const history = useHistory();
 
    useEffect(() => {
@@ -17,30 +20,30 @@ const Result = ({ type }) => {
                break;
            case 'lose':
                setUrl(YouLose);
-               setTryAgaian(prevState => !prevState)
+               setTryAgain(prevState => !prevState)
                break;
            case 'draw':
                setUrl(Draw);
-               setTryAgaian(prevState => !prevState)
+               setTryAgain(prevState => !prevState)
                break;
            default:
                setUrl(YouWin);
        }
    }, [type]);
 
-    if(!tryAgaian) {
+    if(!tryAgain) {
         return (
-            <div className={s.result}>
-                <img src={url} alt="result" />
+            <div className={ s.result }>
+                <img src={ url } alt="result" />
             </div>
         );
     } else {
         return (
-            <div className={s.result}>
-                <img src={url} alt="result" />
+            <div className={ s.result }>
+                <img src={ url } alt="result" />
                 <button
-                    className={s.btn}
-                    onClick={() => history.replace('/game')}
+                    className={ s.btn }
+                    onClick={ () => history.replace('/game') }
                 >
                     Try again
                 </button>

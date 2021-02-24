@@ -2,7 +2,8 @@
     background-image: url(./assets/board.png);
     background-size: cover;
     background-repeat: no-repeat;
-    height: calc(100vw / 1.71);
+    background-position: center center;
+    height: calc(100vw / 1.78);
     position: relative;
 }
 
@@ -31,6 +32,10 @@
 }
 
 .playerOne {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     bottom: 20px;
     left: 2vw;
@@ -39,6 +44,10 @@
 }
 
 .playerTwo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     bottom: 20px;
     right: 2vw;

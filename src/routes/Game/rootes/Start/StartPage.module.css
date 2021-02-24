@@ -10,17 +10,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #fafafa;
     margin-left: 20vw;
-}
-
-.selectedBox {
-    position: fixed;
-    bottom: 3vw;
-    left: 0;
-    width: 20vw;
-    min-height: 50vh;
-    text-align: center;
-    z-index: 99999;
 }
 
 .root h1 {
