@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import fireBaseClass from "../../../../service/firebase";
 
 import { selectPokemonsData } from "../../../../store/pokemon";
-import { playerOne } from "../../../../store/playerOne";
+import { selectPlayerOne } from "../../../../store/playerOne";
 import { selectPlayerTwo } from "../../../../store/playerTwo";
 
 import PokemonCard from "../../../../components/PokemonCard/PokemonCard";
@@ -15,7 +15,7 @@ import s from './FinishPage.module.css';
 
 export const FinishPage = () => {
 
-    const player1 = useSelector(playerOne);
+    const player1 = useSelector(selectPlayerOne);
     const player2  = useSelector(selectPlayerTwo);
     const pokemonInBase = useSelector(selectPokemonsData); 
 

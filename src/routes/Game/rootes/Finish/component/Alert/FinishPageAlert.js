@@ -10,11 +10,13 @@ export const FinishPageAlert = ({ cb, card = false }) => {
 
     const fire = fireBaseClass;
 
+    // при клике на кнопку добавить выбраную карту, добавляем ее в базу
     const handlerAddCard = () =>{
         fire.addCard(card);
         history.push('/game');
     };
 
+    // при клике на кнопку "I don't need these cards" перходим на стартовую страницу без добавления карточки
     const handlerBackStart = () => {
         history.replace('/game');
     };

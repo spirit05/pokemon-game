@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import fetchGitClass from '../../../../service/fetchGit';
 
-import { playerOne } from '../../../../store/playerOne';
+import { selectPlayerOne } from '../../../../store/playerOne';
 import { selectPlayerTwo } from '../../../../store/playerTwo';
 
 import PokemonCard from "../../../../components/PokemonCard/PokemonCard";
@@ -33,18 +33,13 @@ const counterWin = ( board, player1, player2 ) => {
 };
 
 export const BoardPage = () => {
-
-    const pokemons = useSelector(playerOne);
+    // получаем данные из редакс
+    const playerOne = useSelector(selectPlayerOne);
     const playerTwo = useSelector(selectPlayerTwo);
 
+    // устанавливаем первоначальное состояние
     const [ board, setBoard ] = useState([]);
-    const [ player1, setPlayer1 ] = useState( () => {
-        return Object.entries(pokemons).map(([ key, item ]) => ({
-            ...item,
-            possession: 'blue',
-            key: key
-        }) )
-    } );
+    const [ player1, setPlayer1 ] = useState([]);   
     const [ player2, setPlayer2 ] = useState([]);
     const [ choiceCard, setChoiceCard ] = useState([]);
     const [ arrowActive, setArrowActive ] = useState(true);
@@ -54,29 +49,36 @@ export const BoardPage = () => {
     
     const history = useHistory();
 
+    // таймер для задержки имитации случайного выбора в начале игры
     const timer = () => {
         const random = Math.round( Math.random()) + 1;
         setArrowSide(random);
     };
+    
+    // настраиваем состояние при заходе на страницу
+    useEffect(() => { 
 
-    if (Object.keys(pokemons).length < 5) { 
-        history.replace('/game');
-    }
+        setPlayer1(() => {
 
-    useEffect(() => {
+            return Object.entries(playerOne).map(([ key, item ]) => ({
+                ...item,
+                possession: 'blue',
+                key: key
+            }) );
+
+        });
+
         setPlayer2(playerTwo);
 
         fetchGitClass.getBoard().then(data => setBoard(data));
         
         setTimeout(timer, 3000);
 
-        return () => {
-            clearTimeout(timer);
-            setBoard([]);
-          }
+        return () => clearTimeout(timer);
 
-    }, [playerTwo]);
+    }, [playerTwo, playerOne]);
 
+    // при выбранной карте обрабатываем клик по полю
     const handlerClickBoardPlate = async position => {
 
         if (choiceCard.id) {
@@ -101,13 +103,14 @@ export const BoardPage = () => {
 
                 return count;
             });
+            setArrowSide(prev => prev === 1 ? 2 : 1);
         } 
 
-        setArrowSide(prev => prev === 1 ? 2 : 1);
         setArrowActive(true);
         setChoiceCard([]);
     };
 
+    // посчитываем количество ходов, для подсчета и вывода результата игры 
     useEffect( () => {
         if (steps === 9) {
             const [ count1, count2 ] = counterWin( board, player1, player2);
@@ -123,6 +126,10 @@ export const BoardPage = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [steps]);
+
+    if (Object.keys(playerOne).length < 5) { 
+        history.replace('/game');
+    }
 
     return (
         <div className={ s.root }>

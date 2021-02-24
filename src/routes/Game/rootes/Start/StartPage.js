@@ -2,46 +2,48 @@ import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
-import { Button } from "../../../../components/Button/Button";
 import { Loading } from './component/Loading/Loading';
+import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
+import { SelectedBox } from './component/Loading/StartPageCard/SelectedBox';
 
 import { getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemon';
-import { clearPlayerOne, playerOneLoading, setPlayerOne } from '../../../../store/playerOne';
+import { setPlayerOne } from '../../../../store/playerOne';
 import { getPlayerTwoAsync } from '../../../../store/playerTwo';
 
 import s from './StartPage.module.css';
 
 export const StartPage = () => { 
+    // получаем данные из стейта
     const pokemonsRedux = useSelector(selectPokemonsData);
     const isLoadingPokemons = useSelector(selectPokemonsLoading);
-    const isLoadingPlayerOne = useSelector(playerOneLoading);
     const dispatch = useDispatch();
     
+    // устанавливаем первоначальный стейт
     const [selectedCard, setSelectedCard] = useState({});
     const [ cards, setCards ] = useState({});
 
     const history = useHistory();
 
+    //получаем количество выбранных карт для дальнейшего использования
     const countSelectedPokemons = Object.keys(selectedCard).length;
     
+    //запускаем получение всех карт из базы и карт второго игрока,
+    // и очищаем список выбранных карт при заходе на страницу  
     useEffect(() => {
-
         dispatch(getPokemonsAsync());
         dispatch(getPlayerTwoAsync());
-        dispatch(clearPlayerOne());
 
         setSelectedCard({});
+    }, [dispatch]);  
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);  
-
+    // записываем полученные карточки из базы в стейт cards
     useEffect(() => {
 
         setCards(pokemonsRedux);
 
     },[pokemonsRedux]);
 
+    // добавляем выбранную карту в объект selectedCard
     const handlerActiveSelected = (key) => {
 
         const pokemon = {...cards[key]};
@@ -72,6 +74,7 @@ export const StartPage = () => {
 
     };
 
+    // при нажатии на кнопку "start game" записываем в стейт первого игрока выбранные карты
     const handlerStartGameClick = () => {
 
         dispatch(setPlayerOne(selectedCard));
@@ -79,39 +82,13 @@ export const StartPage = () => {
         history.push('/game/board');
     }
 
-    const randomPlayerOneCard = async () => {
-        const copyCard = {...cards}
-        const keys = Object.keys(copyCard);
-
-        let player1 = {...selectedCard};
-
-        for( let i = countSelectedPokemons; i < 5; i++) {
-            let k = keys[Math.round(Math.random() * keys.length)];
-            // let [ a, b ] = Object.entries(copyCard).find(([key]) => key === k );
-            let item = Object.entries(copyCard).find(([key]) => key === k );
-            player1 = ({
-                ...player1,
-                [`${item[0]}`]: item[1]
-            })
-        };
-
-        await dispatch(setPlayerOne(player1));
-
-        history.push('/game/board');
-    };
-
-    const handlerRandomCards = () => {
-
-        randomPlayerOneCard();
-
-    };
-
     return (
         <>
             <div className={s.root}>
                 <div className={s.start} >
                 <h1>Let's started!!!! Select 5 cards.</h1>
                 {
+                    // Пока идет получение карт показываем загрузчик с крутящимся покеболом
                     isLoadingPokemons ? 
                     (
                         <Loading />
@@ -144,56 +121,12 @@ export const StartPage = () => {
                     }
                 </div>
                 </div>
-                <div className={ s.selectedBox }>            
-                    <div className={s.selectedPokemon}>
-                        {
-                            Object.entries(selectedCard).map( 
-                                ([key,{ id, name, img, type, values, selected }]) => (
-                                    <PokemonCard 
-                                        className={ s.selectedCard }
-                                        key={ key }
-                                        name = { name }
-                                        id = { id } 
-                                        img = { img }
-                                        type = { type }
-                                        value = { false }
-                                        values = { values }
-                                        isActive = { true }
-                                        minimize
-                                        isSelected = { selected }
-                                        onChangeCard = { () => { 
-                                                if (countSelectedPokemons <= 5 || selected) {
-                                                    handlerActiveSelected(key);
-                                                } 
-                                            }
-                                        }
-                                    /> 
-                                )
-                            )
-                        }
-                    </div>
-                    {
-                        countSelectedPokemons === 5 ? 
-                        (
-                            <Button 
-                                cb={handlerStartGameClick}
-                                className={ s.startBtn }
-                                title={ 'Start game' }
-                            />
-                        ) :
-                        (
-                            <>
-                                <h3>Selected pokemon { countSelectedPokemons }</h3>
-                                <Button 
-                                    cb={handlerRandomCards}
-                                    className={ s.startBtn }
-                                    title={ 'Random cards' }
-                                    disabled={ isLoadingPokemons && isLoadingPlayerOne }
-                                />
-                            </>
-                        )
-                    }
-                </div>
+                    <SelectedBox 
+                        cards={ selectedCard  } 
+                        allPokemons={ pokemonsRedux }
+                        onChangeCard= { key => handlerActiveSelected(key) }
+                        startGame={ handlerStartGameClick }
+                    />
             </div>
         </>
     );
