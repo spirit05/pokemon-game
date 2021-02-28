@@ -1,21 +1,31 @@
 import { useState } from "react";
+import { LoginForm } from "../LoginForm/LoginForm";
 import { Modal } from "../Modal/Modal";
 
 import { Menu } from "./Menu/Menu";
 import { NavBar } from "./Navbar/NavBar";
 
 export const MenuHeader = ( { bgActive } ) => {
-    const [isMenuActive, setMenuActive] = useState(null);
-    const [isOpenModal, setOpenModal] = useState(false);
 
+    // Устанавливаем первоначальное состояние показа меню и модального окна
+    const [isMenuActive, setMenuActive] = useState(null);
+    const [isOpenModal, setOpenModal] = useState(true);
+
+    // Меняем состояние, показывая/скрывая меню при нажатии гамбургера
     const handlerChangeMenu = () => {
 
         setMenuActive(prevState => !prevState);
     };
 
+    // Меняем состояние, показывая/скрывая модальное окно при нажатии на иконку
     const handlerClickLogin = () => {
         setOpenModal(prevState => !prevState);
     };
+
+    // Принимаем данные с формы для последущей обработки
+    const handlerSubmit = ( value ) => {
+        console.log('#### submit: ', value);
+    }
 
     return (
         <>
@@ -32,10 +42,13 @@ export const MenuHeader = ( { bgActive } ) => {
             />
             <Modal 
                 isOpen={ isOpenModal }
-                title={ "login" } 
+                title={ "Log In ..." } 
                 onCloseModal={ handlerClickLogin }
             >
-                Some text
+                <LoginForm 
+                    onSubmitData={ handlerSubmit }
+                />
+
             </Modal>
         </>
     );
