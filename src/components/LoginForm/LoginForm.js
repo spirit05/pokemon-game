@@ -32,6 +32,7 @@ export const LoginForm = ({ onSubmitData }) => {
                 placeholder={ 'Ввeдите ваш email' }
                 value={ email }
                 onChange={ (e) => setEmail(e) }
+                autoComplete={ 'off' }
                 required
             />
             <Input 
@@ -42,10 +43,11 @@ export const LoginForm = ({ onSubmitData }) => {
                 onChange={ (e) => setPassword(e) }
                 required
             />
-            <input 
-                type="submit" 
-                value="Отправить"
-                className={ s.submit } 
+            <Input 
+                type={ 'submit' } 
+                value={ 'Submit' }
+                name={ 'submit' }
+                className={ s.submit }
             />
         </form>
     );

@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import { ReactComponent as Line } from './assets/line.svg';
+
 import cn from 'classnames';
 import s from './modal.module.css';
 
@@ -39,15 +41,19 @@ export const Modal = ({ isOpen, title, children, onCloseModal }) => {
                 ref= { modalElem }
                 className={ s.modal }
             >
-                <div className={ s.head }>
-                    { title }
-                    <span 
-                        className={ s.btnClose } 
-                        onClick={ handlerCloseModal }
-                    />
-                </div>
-                <div className={ s.content }>
-                    { children }
+                <div className={ s.container }>
+                    <div className={ s.left }>
+                        <div className={ s.login }>{ title }</div>
+                        <div className={ s.eula }> By loggin in you agree to the ridiculously long terms that you didn't bother to read</div>
+                    </div>
+                    <div className={ s.right }>
+                        <span 
+                            className={ s.btnClose } 
+                            onClick={ handlerCloseModal }
+                        />
+                        <Line />
+                        { children }
+                    </div>
                 </div>
             </div>
         </div>

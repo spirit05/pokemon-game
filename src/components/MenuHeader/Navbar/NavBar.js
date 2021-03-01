@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import logo from '../../../img/logo.png'
+import logo from '../../../img/logo.png';
 import { ReactComponent as LoginSVG } from '../../../img/login.svg';
 
 import cn from 'classnames';

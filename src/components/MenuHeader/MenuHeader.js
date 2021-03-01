@@ -9,7 +9,7 @@ export const MenuHeader = ( { bgActive } ) => {
 
     // Устанавливаем первоначальное состояние показа меню и модального окна
     const [isMenuActive, setMenuActive] = useState(null);
-    const [isOpenModal, setOpenModal] = useState(true);
+    const [isOpenModal, setOpenModal] = useState(false);
 
     // Меняем состояние, показывая/скрывая меню при нажатии гамбургера
     const handlerChangeMenu = () => {

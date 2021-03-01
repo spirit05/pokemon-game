@@ -101,7 +101,7 @@
 .loginAndMenu {
   display: flex;
 }
-
+ 
 .loginWrap {
   width: 22px;
   height: 22px;
@@ -121,6 +121,7 @@
 .loginWrap:hover svg g {
   fill: #f300b4;
 }
+
 
 
 
