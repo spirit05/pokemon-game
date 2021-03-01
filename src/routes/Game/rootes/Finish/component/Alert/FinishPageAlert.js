@@ -23,13 +23,13 @@ export const FinishPageAlert = ({ cb, card = false }) => {
 
     return (
         <div className={ s.alert }>
-            <h3>{ !card ? 'Card no selected!' : 'This card is already in your collection!'}</h3>
+            <h3>{ !card ? 'Не выбрана ни одна карта!' : 'Такая карта уже есть в твоей коллекции!'}</h3>
             <div>
                 <button 
                     className={ cn( s.btn, s.btnInfo )  } 
                     onClick={ () => cb() }
                 >
-                    Choose another card
+                    Выбрать другую карту!
                 </button>
                 {
                     !card ? '' : (
@@ -37,7 +37,7 @@ export const FinishPageAlert = ({ cb, card = false }) => {
                             className={ cn( s.btn, s.btnAdd )  } 
                             onClick={ handlerAddCard }
                         >
-                            Add selected
+                            Я хочу эту карту!
                         </button>
                     )
                 }
@@ -45,7 +45,7 @@ export const FinishPageAlert = ({ cb, card = false }) => {
                     className={ cn( s.btn, s.btnSkip )  } 
                     onClick={ handlerBackStart }
                 >
-                    I don't need these cards
+                    Мне не нужны эти карты
                 </button>
             </div>
         </div>

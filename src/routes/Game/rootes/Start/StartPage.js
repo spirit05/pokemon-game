@@ -86,14 +86,10 @@ export const StartPage = () => {
         <>
             <div className={s.root}>
                 <div className={s.start} >
-                <h1>Let's started!!!! Select 5 cards.</h1>
+                <h1>Начнем игру! Для начала выбери 5 карт!</h1>
                 {
                     // Пока идет получение карт показываем загрузчик с крутящимся покеболом
-                    isLoadingPokemons ? 
-                    (
-                        <Loading />
-                    ) :
-                    ''
+                    isLoadingPokemons && <Loading />
                 }
                 <div className={s.flex}>
                     {

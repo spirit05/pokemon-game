@@ -21,3 +21,18 @@
     margin: 0 auto;
     padding: 1rem;
 }
+
+.descr h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.descr a {
+    text-decoration: none;
+    cursor: pointer;
+    color: #fafafa;
+}
+
+.descr a:hover {
+    color: #f300b4;
+}

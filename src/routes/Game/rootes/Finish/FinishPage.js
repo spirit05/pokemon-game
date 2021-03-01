@@ -89,12 +89,12 @@ export const FinishPage = () => {
                     } 
                 </div>
                 <div className={ s.info }>
-                    <h2>You win and you can take one of the opponent's cards to your collection!</h2>
+                    <h2>Ты победил и теперь можешь забрать одну из карт противника в свою коллекцию!</h2>
                     <button 
                         className={ s.btn }
                         onClick={ handlerBackStart }
                     >
-                        Take up selected card  
+                        Забрать выбранную карту  
                     </button>
                     {
                         alert ?
@@ -107,7 +107,7 @@ export const FinishPage = () => {
                         ''
                     }
                 </div>
-                <h3 className={ s.title }>Opponent's card, choose one of them!</h3>
+                <h3 className={ s.title }>Карты противника, выберите одну из них!</h3>
                 <div className={ s.player }>
                     {
                         selectedCard.map( 
