@@ -88,6 +88,11 @@
   }
 }
 .left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1rem 0;
   background: white;
   height: calc(100% - 40px);
   top: 20px;
@@ -102,18 +107,6 @@
     width: calc(100% - 40px);
     max-width: 270px;
   }
-}
-.login {
-  font-size: 50px;
-  font-weight: 900;
-  margin: 50px 40px 40px;
-}
-
-.eula {
-  color: #999;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 40px;
 }
 
 .right {

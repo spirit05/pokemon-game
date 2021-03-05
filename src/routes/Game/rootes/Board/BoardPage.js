@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import fetchGitClass from '../../../../service/fetchGit';
+import { counterWin } from '../../../../service/utils/utils';
 
 import { selectPlayerOne } from '../../../../store/playerOne';
 import { selectPlayerTwo } from '../../../../store/playerTwo';
@@ -13,24 +14,6 @@ import { PlayerBoard } from './component/PlayerBoard/PlayerBoard';
 import Result from './component/Result';
 
 import s from './BoardPage.module.css';
-
-const counterWin = ( board, player1, player2 ) => {
-    let playerCountOne = player1.length;
-    let playerCountTwo = player2.length;
-
-    board.forEach( item => {
-        if (item.card.possession === 'red') {
-            playerCountTwo++;
-        } 
-
-        if (item.card.possession === 'blue') {
-            playerCountOne++;
-
-        }
-    });
-
-    return [playerCountOne, playerCountTwo];
-};
 
 export const BoardPage = () => {
     // получаем данные из редакс
@@ -127,7 +110,7 @@ export const BoardPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [steps]);
 
-    if (Object.keys(playerOne).length < 5) { 
+    if (Object.keys(playerOne).length < 5 || !localStorage.getItem('email')) { 
         history.replace('/game');
     }
 

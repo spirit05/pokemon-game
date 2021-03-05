@@ -122,6 +122,22 @@
   fill: #f300b4;
 }
 
+.userEmail {
+  display: flex;
+  color: #fafafa;
+  margin-right: 1rem;
+}
+
+.userEmail svg {
+  width: 22px;
+  height: 22px;
+  margin: 0 10px;
+}
+
+.userEmail svg g {
+  fill: #fff;
+}
+
 
 
 

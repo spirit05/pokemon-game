@@ -1,6 +1,8 @@
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
+import { NotificationContainer } from 'react-notifications';
 
 import { MenuHeader } from "./components/MenuHeader/MenuHeader";
+import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
 import Footer from "./components/Footer/Footer";
 
 import HomePage from './routes/Home/Home';
@@ -8,6 +10,8 @@ import { GamePage } from './routes/Game/Game';
 import { AboutPage } from "./routes/AboutPage/AboutPage";
 import { ContactPage } from "./routes/ContactPage/ContactPage";
 import { NotFound } from "./routes/NotFound/NotFound";
+
+import 'react-notifications/lib/notifications.css';
 
 
 const App = () => {
@@ -17,6 +21,7 @@ const App = () => {
   const isActive = location.pathname === '/game/board'; 
 
   return (
+    <>
       <Switch>
         <Route path='/404' component={ NotFound } />
 
@@ -29,9 +34,9 @@ const App = () => {
 
             <Switch>
               <Route path='/' exact component={ HomePage } />
-              <Route path='/game' component={ GamePage } />
-              <Route path='/about' component={ AboutPage } />
-              <Route path='/contact' component={ ContactPage } />
+              <PrivateRoute path='/game' component={ GamePage } />
+              <PrivateRoute path='/about' component={ AboutPage } />
+              <PrivateRoute path='/contact' component={ ContactPage } />
               <Route render={() => (<Redirect to='/404' /> )} />
               <Redirect from='/home' to='/'/>
               
@@ -44,6 +49,8 @@ const App = () => {
 
         </Route>
       </Switch>
+      <NotificationContainer/>
+    </>
   )
 };
 

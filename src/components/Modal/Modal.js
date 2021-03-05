@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+import { FormMethod } from './component/FormMethod/FormMethod';
+
 import { ReactComponent as Line } from './assets/line.svg';
 
 import cn from 'classnames';
 import s from './modal.module.css';
 
-export const Modal = ({ isOpen, title, children, onCloseModal }) => {
+export const Modal = ({ isOpen, children, onCloseModal }) => {
 
     // Присваиваем переменной modalElement ссылку на объект в котором прописано свойство ref
     // Хук useRef не приводит к повторному перерендериванию компонента даже когда происходит изменение данных в нем
@@ -15,7 +17,7 @@ export const Modal = ({ isOpen, title, children, onCloseModal }) => {
     useEffect(() => {
 
         document.body.style.overflow = isOpen ? 'hidden' : null;
-
+        
     }, [isOpen]);
 
     // Закрываем модальное окно при клике на крестик
@@ -43,8 +45,7 @@ export const Modal = ({ isOpen, title, children, onCloseModal }) => {
             >
                 <div className={ s.container }>
                     <div className={ s.left }>
-                        <div className={ s.login }>{ title }</div>
-                        <div className={ s.eula }> By loggin in you agree to the ridiculously long terms that you didn't bother to read</div>
+                        <FormMethod />
                     </div>
                     <div className={ s.right }>
                         <span 
