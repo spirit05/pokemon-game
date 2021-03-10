@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NotificationManager } from 'react-notifications';
 
@@ -9,15 +9,22 @@ import { Modal } from "../Modal/Modal";
 import { Menu } from "./Menu/Menu";
 import { NavBar } from "./Navbar/NavBar";
 import fetchAuthClass from "../../service/fetchAuth";
+import { loginUser, handlerExit } from '../../service/utils/utils';
 
 export const MenuHeader = ( { bgActive } ) => {
 
     // Получаем состояние формы - авторизация или регистрация
     const isLogin = useSelector(selectIsLogin);
+    const type = isLogin ? 'login' : 'singup';
 
     // Устанавливаем первоначальное состояние показа меню и модального окна
     const [isMenuActive, setMenuActive] = useState(null);
     const [isOpenModal, setOpenModal] = useState(false);
+    const [ userEmail, setUserEmail ] = useState('');
+    
+    useEffect(()=> {
+        loginUser(setUserEmail);
+    },[userEmail]);
 
     // Меняем состояние, показывая/скрывая меню при нажатии гамбургера
     const handlerChangeMenu = () => {
@@ -40,31 +47,18 @@ export const MenuHeader = ( { bgActive } ) => {
             returnSecureToken: true
         }
 
-
-
         // Если состояние isLogin = true, то проводим авторизацию, в противном случае проводим регистрацию
-        if(isLogin) {
-            const response = await fetchAuthClass.getLoginData(param);
+        const response = await fetchAuthClass.getLoginSingupData(param, type);
 
-            if(response.hasOwnProperty('error')) {
-                 NotificationManager.error(response.error.message, 'Ошибка!');
-            } else { 
-                localStorage.setItem('idToken', response.idToken);
-                localStorage.setItem('email', response.email);
-                handlerClickLogin();
-            }
-        } else {
-            const response = await fetchAuthClass.getRegisterData(param);
-
-            if(response.hasOwnProperty('error')) { 
-                NotificationManager.error(response.error.message, 'Ошибка!');
-            } else { 
-                localStorage.setItem('idToken', response.idToken);
-                localStorage.setItem('email', response.email);
-                NotificationManager.success('В успешно зарегистрированы!');
-                handlerClickLogin();
-            }
-        } 
+        if(response.hasOwnProperty('error')) {
+             NotificationManager.error(response.error.message, 'Ошибка!');
+        } else { 
+            localStorage.setItem('idToken', response.idToken);
+            localStorage.setItem('email', response.email);
+            NotificationManager.success('Вы успешно вошли в игру!');
+            setUserEmail(response.email)
+            handlerClickLogin();
+        }
 
     }
 
@@ -78,6 +72,8 @@ export const MenuHeader = ( { bgActive } ) => {
                 id="navbar"
                 isMenuActive={ isMenuActive }
                 bgActive={ bgActive }
+                user={ userEmail }
+                handlerExitUser={ () => handlerExit(setUserEmail) }
                 onChangeMenu={ handlerChangeMenu }
                 onClickLogin={ handlerClickLogin }
             />

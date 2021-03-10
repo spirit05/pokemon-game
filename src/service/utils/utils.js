@@ -43,3 +43,16 @@ export const counterWin = ( board, player1, player2 ) => {
 
     return [playerCountOne, playerCountTwo];
 };
+
+export const loginUser = (cb) => {
+    const user = localStorage.getItem('email');
+    console.log('us');
+    cb(user);
+}
+
+export const handlerExit = (cb) => {
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('email');
+    console.log('ex');
+    cb('');
+}

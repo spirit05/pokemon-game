@@ -7,15 +7,7 @@ import { ReactComponent as ExitSVG } from '../../../img/exit.svg';
 import cn from 'classnames';
 import s from './navbar.module.css';
 
-export const NavBar = ( { id, bgActive = false, onChangeMenu, isMenuActive, onClickLogin } ) => {
-    
-    const user = localStorage.getItem('email');
-
-    const handlerExit = () => {
-            localStorage.removeItem('idToken');
-            localStorage.removeItem('email');
-    }
-
+export const NavBar = ( { id, bgActive = false, onChangeMenu, isMenuActive, onClickLogin, user, handlerExitUser } ) => {
     return (
         <nav id={ id } className={ cn(s.navbar, { [s.bgActive]: bgActive } )} >
             <div className={ s.navWrapper } >
@@ -30,7 +22,7 @@ export const NavBar = ( { id, bgActive = false, onChangeMenu, isMenuActive, onCl
                             ? (
                                 <div 
                                     className={ s.userEmail }
-                                    onClick={ handlerExit }
+                                    onClick={ () => handlerExitUser && handlerExitUser() }
                                 > { user } 
                                     <ExitSVG />
                                 </div>
