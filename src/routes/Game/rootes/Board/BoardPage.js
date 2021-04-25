@@ -110,7 +110,7 @@ export const BoardPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [steps]);
 
-    if (Object.keys(playerOne).length < 5 || !localStorage.getItem('email')) { 
+    if (Object.keys(playerOne).length < 5) { 
         history.replace('/game');
     }
 

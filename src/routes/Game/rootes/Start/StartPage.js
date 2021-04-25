@@ -21,6 +21,7 @@ export const StartPage = () => {
     // устанавливаем первоначальный стейт
     const [selectedCard, setSelectedCard] = useState({});
     const [ cards, setCards ] = useState({});
+    console.log('cards: ', cards);
 
     const history = useHistory();
 

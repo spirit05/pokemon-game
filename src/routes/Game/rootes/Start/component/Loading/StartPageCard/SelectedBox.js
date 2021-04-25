@@ -34,10 +34,13 @@ export const SelectedBox = ( { cards, allPokemons = {}, onChangeCard, startGame 
 
         const keys = Object.keys(allPokemons);
 
+        const len = keys.length;
+
         let player1 = {...cards};
 
-        while(Object.keys(player1).length < 5) {
-            let k = keys[Math.floor(Math.random() * (keys.length - 1))];
+        for( let i = 0; Object.keys(player1).length < 5; i++) {
+            
+            let k = len < 6 ? keys[i] : keys[Math.floor(Math.random() * (len - 1))]; 
 
             let item = Object.entries(allPokemons).find(([key]) => key === k );            
 

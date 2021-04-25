@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NotificationManager } from 'react-notifications';
 
 import { selectIsLogin } from "../../store/isLogin";
@@ -9,7 +9,7 @@ import { Modal } from "../Modal/Modal";
 import { Menu } from "./Menu/Menu";
 import { NavBar } from "./Navbar/NavBar";
 import fetchAuthClass from "../../service/fetchAuth";
-import { loginUser, handlerExit } from '../../service/utils/utils';
+import { getUserUpdateAsync } from "../../store/user";
 
 export const MenuHeader = ( { bgActive } ) => {
 
@@ -20,11 +20,9 @@ export const MenuHeader = ( { bgActive } ) => {
     // Устанавливаем первоначальное состояние показа меню и модального окна
     const [isMenuActive, setMenuActive] = useState(null);
     const [isOpenModal, setOpenModal] = useState(false);
-    const [ userEmail, setUserEmail ] = useState('');
+
+    const dispatch = useDispatch();
     
-    useEffect(()=> {
-        loginUser(setUserEmail);
-    },[userEmail]);
 
     // Меняем состояние, показывая/скрывая меню при нажатии гамбургера
     const handlerChangeMenu = () => {
@@ -49,14 +47,27 @@ export const MenuHeader = ( { bgActive } ) => {
 
         // Если состояние isLogin = true, то проводим авторизацию, в противном случае проводим регистрацию
         const response = await fetchAuthClass.getLoginSingupData(param, type);
+        console.log('response: ', response);
 
         if(response.hasOwnProperty('error')) {
              NotificationManager.error(response.error.message, 'Ошибка!');
+             handlerClickLogin();
         } else { 
+            if(type === 'singup') {
+                const pokemonsStart = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json());
+
+                console.log('singup data', pokemonsStart);
+
+                for (const item of pokemonsStart.data) {
+                    await fetch(`https://pokemon-game-3922e-default-rtdb.firebaseio.com/${response.localId}/pokemons.json?auth=${response.idToken}`, {
+                        method: 'POST',
+                        body: JSON.stringify(item)
+                    });
+                }
+            }
             localStorage.setItem('idToken', response.idToken);
-            localStorage.setItem('email', response.email);
             NotificationManager.success('Вы успешно вошли в игру!');
-            setUserEmail(response.email)
+            dispatch(getUserUpdateAsync());
             handlerClickLogin();
         }
 
@@ -72,8 +83,6 @@ export const MenuHeader = ( { bgActive } ) => {
                 id="navbar"
                 isMenuActive={ isMenuActive }
                 bgActive={ bgActive }
-                user={ userEmail }
-                handlerExitUser={ () => handlerExit(setUserEmail) }
                 onChangeMenu={ handlerChangeMenu }
                 onClickLogin={ handlerClickLogin }
             />
