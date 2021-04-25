@@ -5,19 +5,19 @@ import s from './menu.module.css';
 
 const MENU = [
     {
-        title: 'HOME',
+        title: 'Главная',
         to: '/'
     },
     {
-        title: 'GAME',
+        title: 'Игра',
         to: '/game'
     },
     {
-        title: 'ABOUT',
+        title: 'О нас',
         to: '/about'
     },
     {
-        title: 'CONTACT',
+        title: 'Контакты',
         to: '/contact'
     }
 ];

@@ -1,0 +1,23 @@
+form {
+  margin: 40px;
+  position: absolute;
+}
+
+.submit {
+  color: #707075;
+  margin-top: 40px;
+  transition: color 300ms;
+  background: transparent;
+  border: 0;
+  font-size: 20px;
+  height: 30px;
+  line-height: 30px;
+  outline: none !important;
+  width: 100%;
+}
+.submit:focus {
+  color: #f2f2f2;
+}
+.submit:active {
+  color: #d0d0d2;
+}

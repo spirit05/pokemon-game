@@ -26,7 +26,7 @@ const Header = ({ title, descr }) => {
                     <Button 
                         cb={handlerClick}
                         className={s.homeBtn}
-                        title={'Start Game'}
+                        title={'Начать игру'}
                     />
                 </div>
             </header>

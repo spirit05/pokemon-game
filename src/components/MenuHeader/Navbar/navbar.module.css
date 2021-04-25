@@ -2,7 +2,7 @@
     position: fixed;
     z-index: 9999;
     width: 100%;
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
     display: flex;
     justify-content: center;
     cursor: pointer;
@@ -18,7 +18,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1400px;
+    /* max-width: 1400px; */
+    background-image: linear-gradient(to bottom, rgb(37, 37, 37), transparent);
     padding: 0 2rem;
   }
   
@@ -87,8 +88,56 @@
     color: #fafafa;
   }
 
+  .logo img {
+    width: 100px;
+  }
+
   @media only screen and (max-width: 849px) {
     .navbar {
       background: #181d23aa;
     }
   }
+
+.loginAndMenu {
+  display: flex;
+}
+ 
+.loginWrap {
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+}
+
+.loginWrap svg {
+  height: 100%;
+  width: 100%;
+}
+
+.loginWrap svg g {
+  fill: #fff;
+  transition: fill 0.25s ease-in-out;
+}
+
+.loginWrap:hover svg g {
+  fill: #f300b4;
+}
+
+.userEmail {
+  display: flex;
+  color: #fafafa;
+  margin-right: 1rem;
+}
+
+.userEmail svg {
+  width: 22px;
+  height: 22px;
+  margin: 0 10px;
+}
+
+.userEmail svg g {
+  fill: #fff;
+}
+
+
+
+

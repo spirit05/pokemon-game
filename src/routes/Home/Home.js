@@ -11,24 +11,24 @@ const HomePage = () => {
     <>
       <Header 
         title= 'Pokemon Game'
-        descr="This is simple triple triad card game"
+        descr="На первый взгляд, это очень простая игра ...  но по мере того, как вы играете, вы узнаете, что есть нечто большее, чем кажется на первый взгляд."
       />
       <Layout 
         id="1"
-        title= 'About game'
+        title= 'Об игре'
         urlBg={bg2}
       >
         <img src={logoImg} className={ s.logo} alt="Pokemon Game Logo" />
-        <p>In the game two players face off against one another, one side playing as "blue", the other as "red" jn a 3x3 grid</p>
-        <p>Each player has five cards in a hand and yhe aim is to capture the opponent's cards by turning them into the playser's own color of red or blue.</p>
+        <p>В игре два игрока сталкиваются друг с другом, одна сторона играет «синими», а другая «красными» в сетке 3x3.</p>
+        <p>У каждого игрока в руке по пять карт, и его цель - захватить карты противника, превратив их в цвет игрока (красный или синий).</p>
       </Layout>
       <Layout 
         id="3"
-        title= 'Rules'
+        title= 'Правила'
         urlBg={bg2}
       >
-        <p>To win, a majority of the total ten cards played (including the one card that is not placed on the board) must be of the player's card color. To do this, the player must capture cards by placing a card adjacent to an opponent's card whereupon the 'ranks' of the sides where the two cards touch will be compared.</p>
-        <p>If the rank of the opponent's card is higher than the player's card, the player's card will be captured and turned into the opponent's color. If the player's rank is higher, the opponent's card will be captured and changed into the player's color instead. </p>
+        <p>Чтобы выиграть, большинство из десяти разыгранных карт (включая одну карту, которая не находится на доске) должны быть цвета карты игрока. Для этого игрок должен захватить карты, поместив карту рядом с картой оппонента, после чего будут сравниваться «ранги» сторон, на которых соприкасаются две карты.</p>
+        <p>Если ранг карты оппонента выше, чем карта игрока, карта игрока будет захвачена и превращена в цвет оппонента. Если ранг игрока выше, карта противника будет захвачена и заменена на цвет игрока.</p>
       </Layout>
     </>
   )

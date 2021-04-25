@@ -1,7 +1,7 @@
 // чтобs coздать одно из состояний нашего стора, мы должны использовать createSlice
 import { createSlice } from '@reduxjs/toolkit';
 
-import fireBaseClass from '../service/firebase';
+import { selectLocalId } from './user';
 
 export const slice = createSlice({
     name: 'pokemons',
@@ -35,10 +35,13 @@ export const selectPokemonsLoading = state => state.pokemons.isLoading;
 
 export const selectPokemonsData = state => state.pokemons.data;
 
-export const getPokemonsAsync = () => async dispatch => {
+export const getPokemonsAsync = () => async (dispatch, getState) => {
+    const localId = selectLocalId(getState());
+    const idToken = localStorage.getItem('idToken');
+
     dispatch(fetchPokemon());
 
-    const data = await fireBaseClass.getCardsOnce();
+    const data = await fetch(`https://pokemon-game-3922e-default-rtdb.firebaseio.com/${localId}/pokemons.json?auth=${idToken}`).then(res => res.json());
 
     dispatch(fetchPokemonResolve(data));
 };

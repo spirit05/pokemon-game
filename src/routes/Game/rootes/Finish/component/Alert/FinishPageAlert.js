@@ -1,19 +1,23 @@
 import { useHistory } from "react-router-dom";
 
-import fireBaseClass from "../../../../../../service/firebase";
-
 import cn from 'classnames';
 import s from "./finishPageAlert.module.css";
+import { useSelector } from "react-redux";
+import { selectLocalId } from "../../../../../../store/user";
 
 export const FinishPageAlert = ({ cb, card = false }) => {
     const history = useHistory();
-
-    const fire = fireBaseClass;
+    const localId = useSelector(selectLocalId);
+    const token = localStorage.getItem('idToken');
+    console.log('token: ', token);
 
     // при клике на кнопку добавить выбраную карту, добавляем ее в базу
-    const handlerAddCard = () =>{
-        fire.addCard(card);
-        history.push('/game');
+    const handlerAddCard = async () =>{
+        await fetch(`https://pokemon-game-3922e-default-rtdb.firebaseio.com/${localId}/pokemons.json?auth=${token}`, {
+                        method: 'POST',
+                        body: JSON.stringify(card)
+                    });
+        // history.push('/game');
     };
 
     // при клике на кнопку "I don't need these cards" перходим на стартовую страницу без добавления карточки
@@ -23,13 +27,13 @@ export const FinishPageAlert = ({ cb, card = false }) => {
 
     return (
         <div className={ s.alert }>
-            <h3>{ !card ? 'Card no selected!' : 'This card is already in your collection!'}</h3>
+            <h3>{ !card ? 'Не выбрана ни одна карта!' : 'Такая карта уже есть в твоей коллекции!'}</h3>
             <div>
                 <button 
                     className={ cn( s.btn, s.btnInfo )  } 
                     onClick={ () => cb() }
                 >
-                    Choose another card
+                    Выбрать другую карту!
                 </button>
                 {
                     !card ? '' : (
@@ -37,7 +41,7 @@ export const FinishPageAlert = ({ cb, card = false }) => {
                             className={ cn( s.btn, s.btnAdd )  } 
                             onClick={ handlerAddCard }
                         >
-                            Add selected
+                            Я хочу эту карту!
                         </button>
                     )
                 }
@@ -45,7 +49,7 @@ export const FinishPageAlert = ({ cb, card = false }) => {
                     className={ cn( s.btn, s.btnSkip )  } 
                     onClick={ handlerBackStart }
                 >
-                    I don't need these cards
+                    Мне не нужны эти карты
                 </button>
             </div>
         </div>

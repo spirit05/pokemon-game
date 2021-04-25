@@ -34,10 +34,13 @@ export const SelectedBox = ( { cards, allPokemons = {}, onChangeCard, startGame 
 
         const keys = Object.keys(allPokemons);
 
+        const len = keys.length;
+
         let player1 = {...cards};
 
-        while(Object.keys(player1).length < 5) {
-            let k = keys[Math.floor(Math.random() * (keys.length - 1))];
+        for( let i = 0; Object.keys(player1).length < 5; i++) {
+            
+            let k = len < 6 ? keys[i] : keys[Math.floor(Math.random() * (len - 1))]; 
 
             let item = Object.entries(allPokemons).find(([key]) => key === k );            
 
@@ -56,7 +59,7 @@ export const SelectedBox = ( { cards, allPokemons = {}, onChangeCard, startGame 
                 {
                     // проверяем количество полученных выбранных карт, чтобы избежать ошибки рендера
                     cardsLen !== 0 
-                        ? Object.entries(cards).map( 
+                        && Object.entries(cards).map( 
                             ([key,{ id, name, img, type, values, selected }]) => (
                                 <div 
                                     key={ key }
@@ -81,7 +84,6 @@ export const SelectedBox = ( { cards, allPokemons = {}, onChangeCard, startGame 
                                 </div>
                             )
                          )
-                        : ''
                 }
             </div>
             {
@@ -92,19 +94,19 @@ export const SelectedBox = ( { cards, allPokemons = {}, onChangeCard, startGame 
                         onClick={ () => startGame && startGame() }
                         className={ s.startBtn }
                     >
-                        Start game
+                        Начать игру
                     </button>
                 ) :
                 (
                     //если карты не выбраны или выбранных  карт меньше пяти показываем кнопку "Random cards"
                     <>
-                        <h3>Selected pokemon { cardsLen }</h3>
+                        <h3>Выбрано покемонов: { cardsLen }</h3>
                         <button 
                             onClick={ handlerRandomCards }
                             className={ s.startBtn }
                             disabled={ isLoadingPokemons && isLoadingPlayerOne }
                         >
-                            Random cards
+                            Играть случайными
                         </button>
                     </>
                 )
